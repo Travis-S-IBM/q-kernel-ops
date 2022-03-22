@@ -14,7 +14,7 @@ from qiskit.utils import algorithm_globals
 from qiskit import QuantumCircuit
 
 
-def circuit_2(width=4, layer=1, seed1=42, verbose=False) -> QuantumCircuit:
+def circuit_5(width=4, layer=1, seed1=42, verbose=False) -> QuantumCircuit:
     nb_qubits = width
     repetitions = layer
     algorithm_globals.random_seed = seed1
