@@ -13,12 +13,10 @@ from qiskit.circuit.library import TwoLocal
 from qiskit.utils import algorithm_globals
 
 
-def circuit_2(width=4, layer=1, shots=1024, seed1=42, verbose=False):
+def circuit_2(width=4, layer=1, seed1=42, verbose=False):
     nb_qubits = width
-    shots = shots
     repetitions = layer
     algorithm_globals.random_seed = seed1
-    # seed2 = seed2
 
     rotation_blocks = ['rx', 'rz']
     entanglement_blocks = 'crz'
