@@ -14,7 +14,9 @@ from qiskit import QuantumCircuit
 import numpy as np
 
 
-def run_sampler(circuit: QuantumCircuit, token: str, shots=1024, seed1=42, verbose=False):
+def run_sampler(
+    circuit: QuantumCircuit, token: str, shots=1024, seed1=42, verbose=False
+) -> tuple(list, list):
     circuit = circuit
     token = token
     shots = shots
@@ -28,3 +30,5 @@ def run_sampler(circuit: QuantumCircuit, token: str, shots=1024, seed1=42, verbo
         result = sampler(circuit_indices=[0], shots=shots, parameter_values=[theta])
         if verbose:
             print(result)
+
+        return result
