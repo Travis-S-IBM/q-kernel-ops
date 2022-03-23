@@ -54,8 +54,6 @@ class Workflow:
         shots = shots
         verbose = verbose
 
-        # if circuit_tpl_id == 2:
-        #    self.circuit_tpl = circuit_2(width=width, layer=layer, verbose=self.verbose)
         circuit_tpl = []
         for id in circuit_tpl_id:
             # if circuit_tpl_id == 2:
