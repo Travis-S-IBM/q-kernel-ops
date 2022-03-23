@@ -26,7 +26,7 @@ def run_sampler(
     service = IBMRuntimeService(auth="legacy", token=token, instance="ibm-q/open/main")
     sampler_factory = IBMSampler(service=service, backend="ibmq_qasm_simulator")
 
-    with sampler_factory(circuits=circuit) as sampler:
+    with sampler_factory(circuits=[circuit]) as sampler:
         result = sampler(circuit_indices=[0], shots=shots, parameter_values=[theta])
         if verbose:
             print(result)
