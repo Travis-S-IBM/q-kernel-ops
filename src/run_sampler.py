@@ -21,7 +21,7 @@ def run_sampler(
     token = token
     shots = shots
     np.random.seed(seed=seed1)
-    theta = np.random.rand(len(circuit.parameters))
+    theta = list(np.random.rand(len(circuit.parameters)))
 
     service = IBMRuntimeService(auth="legacy", token=token, instance="ibm-q/open/main")
     sampler_factory = IBMSampler(service=service, backend="ibmq_qasm_simulator")
