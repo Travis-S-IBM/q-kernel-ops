@@ -12,7 +12,7 @@ class Workflow:
     Each public method of this class is CLI command
     and arguments for method are options/flags for this command.
 
-    Ex: `python worflow.py full_worflow`
+    Ex: `python worflow.py kernel_flow --circuit_tpl_id=[2,5] --auth="cloud" --token="very_long_string"`
     """
 
     def __init__(self):
