@@ -14,13 +14,14 @@ from qiskit import QuantumCircuit
 
 
 def run_sampler(
-    circuits: [QuantumCircuit], token: str, shots=1024, verbose=False
+    circuits: [QuantumCircuit], auth: str, token: str, shots=1024, verbose=False
 ) -> SamplerResult:
     circuits = circuits
     token = token
+    auth = auth
     shots = shots
 
-    service = IBMRuntimeService(auth="legacy", token=token, instance="ibm-q/open/main")
+    service = IBMRuntimeService(auth=auth, token=token, instance="ibm-q/open/main")
     sampler_factory = IBMSampler(service=service, backend="ibmq_qasm_simulator")
 
     with sampler_factory(circuits=circuits) as sampler:
