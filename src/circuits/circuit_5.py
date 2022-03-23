@@ -10,14 +10,12 @@
 #############################################
 
 from qiskit.circuit.library import TwoLocal
-from qiskit.utils import algorithm_globals
 from qiskit import QuantumCircuit
 
 
-def circuit_5(width=4, layer=1, seed1=42, verbose=False) -> QuantumCircuit:
+def circuit_5(width=4, layer=1, verbose=False) -> QuantumCircuit:
     nb_qubits = width
     repetitions = layer
-    algorithm_globals.random_seed = seed1
 
     rotation_blocks = ["rx", "rz"]
     entanglement_blocks = "crz"
@@ -41,7 +39,6 @@ def circuit_5(width=4, layer=1, seed1=42, verbose=False) -> QuantumCircuit:
         insert_barriers=insert_barriers,
         skip_final_rotation_layer=skip_final_rotation_layer,
     )
-    circuit.measure_all()
 
     if verbose:
         print(entangler_map)

@@ -9,25 +9,22 @@
 #
 #############################################
 
-from qiskit_ibm_runtime import IBMRuntimeService, IBMSampler
+from qiskit_ibm_runtime import IBMRuntimeService, IBMSampler, SamplerResult
 from qiskit import QuantumCircuit
-import numpy as np
 
 
 def run_sampler(
-    circuit: QuantumCircuit, token: str, shots=1024, seed1=42, verbose=False
-) -> tuple(list, list):
-    circuit = circuit
+    circuits: [QuantumCircuit], token: str, shots=1024, verbose=False
+) -> SamplerResult:
+    circuits = circuits
     token = token
     shots = shots
-    np.random.seed(seed=seed1)
-    theta = list(np.random.rand(len(circuit.parameters)))
 
     service = IBMRuntimeService(auth="legacy", token=token, instance="ibm-q/open/main")
     sampler_factory = IBMSampler(service=service, backend="ibmq_qasm_simulator")
 
-    with sampler_factory(circuits=[circuit]) as sampler:
-        result = sampler(circuit_indices=[0], shots=shots, parameter_values=[theta])
+    with sampler_factory(circuits=circuits) as sampler:
+        result = sampler(circuit_indices=[i for i in range(len(circuits))], shots=shots)
         if verbose:
             print(result)
 
