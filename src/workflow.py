@@ -1,8 +1,9 @@
 """Workflow class for controlling all CLI functions."""
 
-from src.circuits import circuit_5, circuit_2, kernel_circuit
 from qiskit_ibm_runtime import SamplerResult, IBMRuntimeService
+from src.circuits import circuit_5, circuit_2, kernel_circuit
 from src.runtime import run_sampler
+import sys
 
 
 class Workflow:
@@ -64,6 +65,9 @@ class Workflow:
             logs output
             SamplerResult: result of the kernel job
         """
+        circuit_tpl_id = circuit_tpl_id
+        width = width
+        layer = layer
         seed1 = seed1
         seed2 = seed2
         backend = backend
@@ -71,14 +75,14 @@ class Workflow:
         verbose = verbose
 
         circuit_tpl = []
-        for id in circuit_tpl_id:
-            # if circuit_tpl_id == 2:
-            # circuit_tpl.append(circuit_2(width=width, layer=layer, verbose=verbose))
-            if id == 5:
+        for tpl_id in circuit_tpl_id:
+            if tpl_id == 2:
+                circuit_tpl.append(circuit_2(width=width, layer=layer, verbose=verbose))
+            elif tpl_id == 5:
                 circuit_tpl.append(circuit_5(width=width, layer=layer, verbose=verbose))
             else:
                 print("Please chooce a circuit_tpl_id between [2, 5, X, X]")
-                return exit(1)
+                sys.exit(1)
 
         kernel_cirq = []
         for tpl in circuit_tpl:

@@ -1,5 +1,4 @@
-#!/usr/bin/python3
-
+"""
 #############################################
 #
 # circuit_2.py
@@ -8,22 +7,32 @@
 # from https://arxiv.org/abs/1905.10876 fig 3.
 #
 #############################################
+"""
 
 from qiskit.circuit.library import TwoLocal
+from qiskit import QuantumCircuit
 
-######## Sim Circuit 2 ########
 
+def circuit_2(width=4, layer=1, verbose=False) -> QuantumCircuit:
+    """Template circuit 2
 
-def circuit_2(num_qubits=4, reps=1, verbose=False):
+    Args:
+        width: number of qubits
+        layer: number of repetitions
+        verbose: True/False
 
-    entangler_map = [(i, i - 1) for i in range(num_qubits - 1, 0, -1)]
+    Return:
+        The circuit generate
+    """
+
+    entangler_map = [(i, i - 1) for i in range(width - 1, 0, -1)]
 
     circuit = TwoLocal(
-        num_qubits=num_qubits,
+        num_qubits=width,
         rotation_blocks=["rx", "rz"],
         entanglement_blocks="cx",
         entanglement=entangler_map,
-        reps=reps,
+        reps=layer,
         skip_unentangled_qubits=False,
         skip_final_rotation_layer=True,
         parameter_prefix="θ",

@@ -17,6 +17,7 @@ jobs:
         pip install tox
         curl https://raw.githubusercontent.com/qiskit-community/ecosystem/main/ecosystem/templates/.pylintrc > .pylintrc
     - name: Run styles check
+      continue-on-error: true
       run: tox -elint
   json-lint:
     runs-on: ubuntu-latest
