@@ -1,9 +1,9 @@
 """Workflow class for controlling all CLI functions."""
 
+import sys
 from qiskit_ibm_runtime import SamplerResult, IBMRuntimeService
 from src.circuits import circuit_5, circuit_2, kernel_circuit
 from src.runtime import run_sampler
-import sys
 
 
 class Workflow:
