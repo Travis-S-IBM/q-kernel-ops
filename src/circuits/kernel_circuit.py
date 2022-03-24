@@ -13,7 +13,9 @@ from qiskit import QuantumCircuit
 import numpy as np
 
 
-def kernel_circuit(circuit: QuantumCircuit, seed1: int, seed2: int, verbose=False) -> QuantumCircuit:
+def kernel_circuit(
+    circuit: QuantumCircuit, seed1: int, seed2: int, verbose=False
+) -> QuantumCircuit:
     template = circuit
     seed1 = seed1
     seed2 = seed2

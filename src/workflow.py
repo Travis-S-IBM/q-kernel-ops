@@ -19,7 +19,9 @@ class Workflow:
         pass
 
     @staticmethod
-    def authentication(auth: str, token: str, instance="ibm-q/open/main", overwrite=False) -> None:
+    def authentication(
+        auth: str, token: str, instance="ibm-q/open/main", overwrite=False
+    ) -> None:
         """Commands for authentication.
 
         Args:
@@ -31,18 +33,20 @@ class Workflow:
         Return:
             Register the session in disk space
         """
-        IBMRuntimeService.save_account(auth=auth, token=token, instance=instance, overwrite=overwrite)
+        IBMRuntimeService.save_account(
+            auth=auth, token=token, instance=instance, overwrite=overwrite
+        )
 
     @staticmethod
     def kernel_flow(
-            circuit_tpl_id: [int],
-            width=4,
-            layer=1,
-            seed1=42,
-            seed2=4242,
-            backend="ibmq_qasm_simulator",
-            shots=1024,
-            verbose=False,
+        circuit_tpl_id: [int],
+        width=4,
+        layer=1,
+        seed1=42,
+        seed2=4242,
+        backend="ibmq_qasm_simulator",
+        shots=1024,
+        verbose=False,
     ) -> SamplerResult:
         """Command for calling body issue parsing function.
 
