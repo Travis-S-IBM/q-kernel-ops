@@ -65,15 +65,6 @@ class Workflow:
             logs output
             SamplerResult: result of the kernel job
         """
-        circuit_tpl_id = circuit_tpl_id
-        width = width
-        layer = layer
-        seed1 = seed1
-        seed2 = seed2
-        backend = backend
-        shots = shots
-        verbose = verbose
-
         circuit_tpl = []
         for tpl_id in circuit_tpl_id:
             if tpl_id == 2:

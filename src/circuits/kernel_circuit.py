@@ -28,8 +28,6 @@ def kernel_circuit(
         The generate circuit without measurement
     """
     template = circuit
-    seed1 = seed1
-    seed2 = seed2
 
     np.random.seed(seed1)
     x_axe = np.random.uniform(size=template.num_parameters)
