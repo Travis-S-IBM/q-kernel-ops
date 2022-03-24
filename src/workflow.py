@@ -27,6 +27,7 @@ class Workflow:
         layer=1,
         seed1=42,
         seed2=4242,
+        backend="ibmq_qasm_simulator",
         shots=1024,
         verbose=False,
     ) -> SamplerResult:
@@ -51,6 +52,7 @@ class Workflow:
         auth = auth
         seed1 = seed1
         seed2 = seed2
+        backend = backend
         shots = shots
         verbose = verbose
 
@@ -71,7 +73,7 @@ class Workflow:
             )
 
         run = run_sampler(
-            circuits=kernel_cirq, auth=auth, token=token, shots=shots, verbose=verbose
+            circuits=kernel_cirq, auth=auth, token=token, backend=backend, shots=shots, verbose=verbose
         )
 
         print(
