@@ -31,8 +31,6 @@ def kernel_circuit(circuit: QuantumCircuit, seed1: int, seed2: int, verbose=Fals
         template.inverse().bind_parameters(y), [i for i in range(template.num_qubits)]
     )
 
-    kernel_cirq.measure_all()
-
     if verbose:
         print(kernel_cirq.decompose())
 
