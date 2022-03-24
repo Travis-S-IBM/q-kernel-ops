@@ -14,19 +14,17 @@ from qiskit import QuantumCircuit
 
 
 def run_sampler(
-    circuits: [QuantumCircuit], auth: str, token: str, backend="ibmq_qasm_simulator", shots=1024, verbose=False
+    circuits: [QuantumCircuit], backend="ibmq_qasm_simulator", shots=1024, verbose=False
 ) -> SamplerResult:
     circuits = circuits
-    token = token
-    auth = auth
     shots = shots
     backend = backend
     
-    if backend =! "statevector_simulator":
+    if backend != "statevector_simulator":
         for cirq in circuits:
             cirq.measure_all()
 
-    service = IBMRuntimeService(auth=auth, token=token, instance="ibm-q/open/main")
+    service = IBMRuntimeService()
     sampler_factory = IBMSampler(service=service, backend=backend)
 
     with sampler_factory(circuits=circuits) as sampler:
