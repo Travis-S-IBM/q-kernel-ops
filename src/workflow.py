@@ -74,10 +74,12 @@ class Workflow:
 
         if matrix_size is not None:
             if matrix_size[0] != matrix_size[1]:
-                print("""
+                print(
+                    """
                 The coordinate have to be square.
                 Ex. [2,2] or [5,5]
-                """)
+                """
+                )
                 sys.exit(1)
             for x_axe in range(matrix_size[0] + 1):
                 for y_axe in range(matrix_size[1] + 1):
