@@ -1,10 +1,10 @@
 """Workflow class for controlling all CLI functions."""
 
 import sys
+from typing import List
 from qiskit_ibm_runtime import SamplerResult, IBMRuntimeService
 from src.circuits import circuit_5, circuit_2, kernel_circuit
 from src.runtime import run_sampler
-from typing import Optional
 
 
 class Workflow:
@@ -46,7 +46,7 @@ class Workflow:
         layer: int = 1,
         seed1: int = 42,
         seed2: int = 4242,
-        matrix_size: Optional[int] = None,
+        matrix_size: List[int] = None,
         backend: str = "ibmq_qasm_simulator",
         shots: int = 1024,
         verbose: bool = False,
@@ -59,6 +59,7 @@ class Workflow:
             layer: number of reps for the tpl
             seed1: seed for x axes
             seed2: seed for y axes
+            matrix_size: matrix size for seed coordinate [x, y]
             backend: backend for running circuit
             shots: number of shots for the circuit
             verbose: print all kind of information
@@ -72,10 +73,16 @@ class Workflow:
         seed_y = []
 
         if matrix_size is not None:
-            for x in range(matrix_size[0] + 1):
-                for y in range(matrix_size[1] + 1):
-                    seed_x.append(x)
-                    seed_y.append(y)
+            if matrix_size[0] != matrix_size[1]:
+                print("""
+                The coordinate have to be square.
+                Ex. [2,2] or [5,5]
+                """)
+                sys.exit(1)
+            for x_axe in range(matrix_size[0] + 1):
+                for y_axe in range(matrix_size[1] + 1):
+                    seed_x.append(x_axe)
+                    seed_y.append(y_axe)
         else:
             seed_x.append(seed1)
             seed_y.append(seed2)
@@ -92,9 +99,14 @@ class Workflow:
 
         kernel_cirq = []
         for tpl in circuit_tpl:
-            for coord in range(len(seed_x)):
+            for index, _ in enumerate(seed_x):
                 kernel_cirq.append(
-                    kernel_circuit(circuit=tpl, seed1=seed_x[coord], seed2=seed_y[coord], verbose=verbose)
+                    kernel_circuit(
+                        circuit=tpl,
+                        seed1=seed_x[index],
+                        seed2=seed_y[index],
+                        verbose=verbose,
+                    )
                 )
 
         run = run_sampler(
