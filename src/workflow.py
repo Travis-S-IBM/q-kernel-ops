@@ -4,6 +4,7 @@ import sys
 from qiskit_ibm_runtime import SamplerResult, IBMRuntimeService
 from src.circuits import circuit_5, circuit_2, kernel_circuit
 from src.runtime import run_sampler
+from typing import Optional
 
 
 class Workflow:
@@ -41,13 +42,14 @@ class Workflow:
     @staticmethod
     def kernel_flow(
         circuit_tpl_id: [int],
-        width=4,
-        layer=1,
-        seed1=42,
-        seed2=4242,
-        backend="ibmq_qasm_simulator",
-        shots=1024,
-        verbose=False,
+        width: int = 4,
+        layer: int = 1,
+        seed1: int = 42,
+        seed2: int = 4242,
+        matrix_size: Optional[int] = None,
+        backend: str = "ibmq_qasm_simulator",
+        shots: int = 1024,
+        verbose: bool = False,
     ) -> SamplerResult:
         """Command for calling body issue parsing function.
 
@@ -65,6 +67,19 @@ class Workflow:
             logs output
             SamplerResult: result of the kernel job
         """
+
+        seed_x = []
+        seed_y = []
+
+        if matrix_size is not None:
+            for x in range(matrix_size[0] + 1):
+                for y in range(matrix_size[1] + 1):
+                    seed_x.append(x)
+                    seed_y.append(y)
+        else:
+            seed_x.append(seed1)
+            seed_y.append(seed2)
+
         circuit_tpl = []
         for tpl_id in circuit_tpl_id:
             if tpl_id == 2:
@@ -77,9 +92,10 @@ class Workflow:
 
         kernel_cirq = []
         for tpl in circuit_tpl:
-            kernel_cirq.append(
-                kernel_circuit(circuit=tpl, seed1=seed1, seed2=seed2, verbose=verbose)
-            )
+            for coord in range(len(seed_x)):
+                kernel_cirq.append(
+                    kernel_circuit(circuit=tpl, seed1=seed_x[coord], seed2=seed_y[coord], verbose=verbose)
+                )
 
         run = run_sampler(
             circuits=kernel_cirq, backend=backend, shots=shots, verbose=verbose
