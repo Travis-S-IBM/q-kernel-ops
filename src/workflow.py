@@ -3,7 +3,7 @@
 import sys
 from typing import List
 from qiskit_ibm_runtime import SamplerResult, IBMRuntimeService
-from src.circuits import circuit_2, circuit_5, circuit_10, kernel_circuit
+from src.circuits import circuit_2, circuit_5, circuit_10, circuit_18, kernel_circuit
 from src.runtime import run_sampler
 
 
@@ -96,9 +96,15 @@ class Workflow:
             elif tpl_id == 5:
                 circuit_tpl.append(circuit_5(width=width, layer=layer, verbose=verbose))
             elif tpl_id == 10:
-                circuit_tpl.append(circuit_10(width=width, layer=layer, verbose=verbose))
+                circuit_tpl.append(
+                    circuit_10(width=width, layer=layer, verbose=verbose)
+                )
+            elif tpl_id == 18:
+                circuit_tpl.append(
+                    circuit_18(width=width, layer=layer, verbose=verbose)
+                )
             else:
-                print("Please chooce a circuit_tpl_id between [2, 5, 10, X]")
+                print("Please chooce a circuit_tpl_id between [2, 5, 10, 18, X]")
                 sys.exit(1)
 
         kernel_cirq = []

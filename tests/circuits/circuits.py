@@ -17,10 +17,15 @@ class TestUtils(TestCase):
         """Test to test the circuit template 5."""
         circuit = circuit_5(width=3, layer=1)
         self.assertTrue(isinstance(circuit, QuantumCircuit))
-    
+
     def test_circuit_10(self):
         """Test to test the circuit template 10."""
         circuit = circuit_10(width=3, layer=2, verbose=True)
+        self.assertTrue(isinstance(circuit, QuantumCircuit))
+
+    def test_circuit_18(self):
+        """Test to test the circuit template 18."""
+        circuit = circuit_18(verbose=True)
         self.assertTrue(isinstance(circuit, QuantumCircuit))
 
     def test_kernel_circuit(self):
