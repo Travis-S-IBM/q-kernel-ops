@@ -24,21 +24,13 @@ def circuit_18(width=4, layer=1, verbose=False) -> QuantumCircuit:
     Return:
         The circuit generate
     """
-    nb_qubits = width
-    repetitions = layer
-
-    rotation_blocks = ["rx", "ry"]
-    entanglement_blocks = "crz"
-    entanglement = "circular"
-    skip_final_rotation_layer = True
-
     circuit = twolocal_tpl(
-        nb_qubits=nb_qubits,
-        repetitions=repetitions,
-        rotation_blocks=rotation_blocks,
-        entanglement_blocks=entanglement_blocks,
-        entanglement=entanglement,
-        skip_final_rotation_layer=skip_final_rotation_layer,
+        nb_qubits=width,
+        repetitions=layer,
+        rotation_blocks=["rx", "ry"],
+        entanglement_blocks="crz",
+        entanglement="circular",
+        skip_final_rotation_layer=True,
         name="sim_circuit_18_%d_",
         verbose=verbose,
     )

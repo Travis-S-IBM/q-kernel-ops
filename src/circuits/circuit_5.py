@@ -24,28 +24,19 @@ def circuit_5(width=4, layer=1, verbose=False) -> QuantumCircuit:
     Return:
         The circuit generate
     """
-    nb_qubits = width
-    repetitions = layer
-
-    rotation_blocks = ["rx", "rz"]
-    entanglement_blocks = "crz"
-
     entangler_map = []
-    for i in range(nb_qubits):
-        for target_qubit in range(nb_qubits):
+    for i in range(width):
+        for target_qubit in range(width):
             if target_qubit != i:
                 entangler_map.append((i, target_qubit))
 
-    entanglement = entangler_map
-    skip_final_rotation_layer = False
-
     circuit = twolocal_tpl(
-        nb_qubits=nb_qubits,
-        repetitions=repetitions,
-        rotation_blocks=rotation_blocks,
-        entanglement_blocks=entanglement_blocks,
-        entanglement=entanglement,
-        skip_final_rotation_layer=skip_final_rotation_layer,
+        nb_qubits=width,
+        repetitions=layer,
+        rotation_blocks=["rx", "rz"],
+        entanglement_blocks="crz",
+        entanglement=entangler_map,
+        skip_final_rotation_layer=False,
         name="sim_circuit_5_%d_",
         verbose=verbose,
     )
