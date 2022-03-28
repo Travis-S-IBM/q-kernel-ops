@@ -2,7 +2,7 @@
 from unittest import TestCase
 from qiskit import QuantumCircuit
 
-from src.circuits import circuit_2, circuit_5, circuit_10, kernel_circuit
+from src.circuits import circuit_2, circuit_5, circuit_10, circuit_18, kernel_circuit
 
 
 class TestUtils(TestCase):
