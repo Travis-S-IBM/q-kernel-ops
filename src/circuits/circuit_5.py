@@ -9,8 +9,8 @@
 #############################################
 """
 
-from qiskit.circuit.library import TwoLocal
 from qiskit import QuantumCircuit
+from .circuit_tpl import twolocal_tpl
 
 
 def circuit_5(width=4, layer=1, verbose=False) -> QuantumCircuit:
@@ -37,21 +37,17 @@ def circuit_5(width=4, layer=1, verbose=False) -> QuantumCircuit:
                 entangler_map.append((i, target_qubit))
 
     entanglement = entangler_map
-    insert_barriers = True
     skip_final_rotation_layer = False
 
-    circuit = TwoLocal(
-        num_qubits=nb_qubits,
+    circuit = twolocal_tpl(
+        nb_qubits=nb_qubits,
+        repetitions=repetitions,
         rotation_blocks=rotation_blocks,
         entanglement_blocks=entanglement_blocks,
         entanglement=entanglement,
-        reps=repetitions,
-        insert_barriers=insert_barriers,
         skip_final_rotation_layer=skip_final_rotation_layer,
+        name="sim_circuit_5_%d_",
+        verbose=verbose,
     )
-
-    if verbose:
-        print(entangler_map)
-        print(circuit.decompose())
 
     return circuit

@@ -2,7 +2,14 @@
 from unittest import TestCase
 from qiskit import QuantumCircuit
 
-from src.circuits import circuit_2, circuit_5, circuit_10, circuit_18, kernel_circuit
+from src.circuits import (
+    circuit_2,
+    circuit_5,
+    circuit_10,
+    circuit_18,
+    kernel_circuit,
+    twolocal_tpl,
+)
 
 
 class TestUtils(TestCase):
@@ -33,3 +40,16 @@ class TestUtils(TestCase):
         circuit_tpl = circuit_5()
         kernel_cirq = kernel_circuit(circuit_tpl, 42, 4242)
         self.assertTrue(isinstance(kernel_cirq, QuantumCircuit))
+
+    def test_twolocal(self):
+        """Test to test the kernel circuit."""
+        twolocal_circuit = twolocal_tpl(
+            nb_qubits=5,
+            repetitions=1,
+            rotation_blocks=["rx", "rz"],
+            entanglement_blocks="cx",
+            entanglement="full",
+            skip_final_rotation_layer=True,
+            verbose=False,
+        )
+        self.assertTrue(isinstance(twolocal_circuit, QuantumCircuit))
