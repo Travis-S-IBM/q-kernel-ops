@@ -1,10 +1,13 @@
 """Workflow class for controlling all CLI functions."""
 
+import os
 import sys
 from typing import List
-from qiskit_ibm_runtime import SamplerResult, IBMRuntimeService
-from src.circuits import circuit_2, circuit_5, circuit_10, circuit_18, kernel_circuit
-from src.runtime import run_sampler
+
+import pandas as pd
+from qiskit_ibm_runtime import IBMRuntimeService
+
+from src.controllers import kernel_endpoint
 
 
 class Workflow:
@@ -50,8 +53,8 @@ class Workflow:
         backend: str = "ibmq_qasm_simulator",
         shots: int = 1024,
         verbose: bool = False,
-    ) -> SamplerResult:
-        """Command for calling body issue parsing function.
+    ) -> [str]:
+        """Command for kernel matrix generation.
 
         Args:
             circuit_tpl_id: list of circuit id to run as template
@@ -65,10 +68,8 @@ class Workflow:
             verbose: print all kind of information
 
         Returns:
-            logs output
-            SamplerResult: result of the kernel job
+            Array of data files name
         """
-
         seed_x = []
         seed_y = []
 
@@ -89,42 +90,36 @@ class Workflow:
             seed_x.append(seed1)
             seed_y.append(seed2)
 
-        circuit_tpl = []
-        for tpl_id in circuit_tpl_id:
-            if tpl_id == 2:
-                circuit_tpl.append(circuit_2(width=width, layer=layer, verbose=verbose))
-            elif tpl_id == 5:
-                circuit_tpl.append(circuit_5(width=width, layer=layer, verbose=verbose))
-            elif tpl_id == 10:
-                circuit_tpl.append(
-                    circuit_10(width=width, layer=layer, verbose=verbose)
-                )
-            elif tpl_id == 18:
-                circuit_tpl.append(
-                    circuit_18(width=width, layer=layer, verbose=verbose)
-                )
-            else:
-                print("Please chooce a circuit_tpl_id between [2, 5, 10, 18, X]")
-                sys.exit(1)
-
-        kernel_cirq = []
-        for tpl in circuit_tpl:
-            for index, _ in enumerate(seed_x):
-                kernel_cirq.append(
-                    kernel_circuit(
-                        circuit=tpl,
-                        seed1=seed_x[index],
-                        seed2=seed_y[index],
-                        verbose=verbose,
-                    )
-                )
-
-        run = run_sampler(
-            circuits=kernel_cirq, backend=backend, shots=shots, verbose=verbose
+        return kernel_endpoint(
+            circuit_tpl_id=circuit_tpl_id,
+            width=width,
+            layer=layer,
+            seed_x=seed_x,
+            seed_y=seed_y,
+            backend=backend,
+            shots=shots,
+            verbose=verbose,
         )
+
+    @staticmethod
+    def view_kernel(file_name: str) -> pd.DataFrame:
+        """Commands for decode kernel files.
+
+        Args:
+            file_name: name of the file to decode in resources/kernel_metadata
+
+        Return:
+            Return file_name decode as pandas.Dataframe
+        """
+        local = "../resources/kernel_metadata"
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+
+        data_fea = pd.read_feather("{}/{}/".format(current_dir, local) + file_name)
 
         print(
-            "::set-output name={name}::{value}".format(name="KernelResult", value=run)
+            "::set-output name={name}::{value}".format(
+                name=file_name, value="\n" + str(data_fea)
+            )
         )
 
-        return run
+        return data_fea
