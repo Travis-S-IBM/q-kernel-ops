@@ -1,3 +1,14 @@
+"""
+#############################################
+#
+# kernel.py
+#
+# function for kernel programs
+#
+#
+#############################################
+"""
+
 import sys
 from typing import List
 
@@ -90,7 +101,7 @@ def kernel_endpoint(
             "::set-output name={name}::{value}".format(name="KernelResult", value=run)
         )
 
-    fea_files = kernel_metadata(
+    return kernel_metadata(
         circuit_tpl_id=circuit_tpl_id,
         width=width,
         layer=layer,
@@ -99,5 +110,3 @@ def kernel_endpoint(
         seed2=seed_y,
         runtime_result=run,
     )
-
-    return fea_files

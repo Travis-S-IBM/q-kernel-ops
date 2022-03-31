@@ -13,6 +13,10 @@ python worflow.py kernel_flow --circuit_tpl_id=[2,5]
 python worflow.py kernel_flow --circuit_tpl_id=[5] --matrix_size=[1,1]
 :warning: You can't use the option --seed1 and --seed2 if you use --matrix_size
 ```
+4. To decode and access the data from metadata kernel files
+```
+python worflow.py view_kernel --file_name="kernels-2-ideal.csv"
+```
 """
 import fire
 

@@ -67,7 +67,6 @@ class Workflow:
             verbose: print all kind of information
 
         Returns:
-            logs output
             Array of data files name
         """
         return kernel_endpoint(
