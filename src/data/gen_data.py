@@ -9,9 +9,9 @@
 #############################################
 """
 
-from qiskit_ibm_runtime import SamplerResult
 import os
 import pandas as pd
+from qiskit_ibm_runtime import SamplerResult
 
 
 def kernel_metadata(
@@ -63,12 +63,12 @@ def kernel_metadata(
             "seed_y": seed2,
             "fidelity": fidelity,
         }
-        df = pd.DataFrame(fea_file)
+        data_fea = pd.DataFrame(fea_file)
 
         data_name = "kernels-" + str(circuit) + "-ideal.csv"
         current_dir = os.path.dirname(os.path.abspath(__file__))
         dest = "../../resources/kernel_metadata"
-        df.to_feather("{}/{}/".format(current_dir, dest) + data_name)
+        data_fea.to_feather("{}/{}/".format(current_dir, dest) + data_name)
 
         files.append(data_name)
 

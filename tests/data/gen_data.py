@@ -1,9 +1,8 @@
 """Tests for data."""
-from typing import Type, List
-
+from typing import List
+from unittest import TestCase
 from src.data import kernel_metadata
 from tests.runtime import return_sampler
-from unittest import TestCase
 
 
 class TestUtils(TestCase):
@@ -12,7 +11,7 @@ class TestUtils(TestCase):
     def test_kernel_metadata(self):
         """Test to test the kernel metadata function."""
         re_sampler = return_sampler.get_sampler()
-        circuits_2 = [i for i in range(901, 901 + int(len(re_sampler.quasi_dists) / 2))]
+        circuits_2 = list(range(901, 901 + int(len(re_sampler.quasi_dists) / 2)))
         seed_x_2 = [
             42 for i in range(int(len(re_sampler.quasi_dists) / len(circuits_2)))
         ]
@@ -31,7 +30,7 @@ class TestUtils(TestCase):
         )
         self.assertTrue(isinstance(fea_files_2, List))
 
-        circuits_3 = [i for i in range(901, 901 + int(len(re_sampler.quasi_dists) / 3))]
+        circuits_3 = list(range(901, 901 + int(len(re_sampler.quasi_dists) / 3)))
         seed_x_3 = [
             42 for i in range(int(len(re_sampler.quasi_dists) / len(circuits_3)))
         ]

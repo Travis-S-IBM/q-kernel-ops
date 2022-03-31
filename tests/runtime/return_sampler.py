@@ -1,6 +1,6 @@
 """Generate sampler return."""
-from qiskit_ibm_runtime import SamplerResult
 from ast import literal_eval
+from qiskit_ibm_runtime import SamplerResult
 
 
 def get_sampler() -> SamplerResult:
