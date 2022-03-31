@@ -31,7 +31,7 @@ class TestUtils(TestCase):
         )
         self.assertTrue(isinstance(fea_files_2, List))
 
-        circuits_3 = [i for i in range(100, 100 + int(len(re_sampler.quasi_dists) / 3))]
+        circuits_3 = [i for i in range(901, 901 + int(len(re_sampler.quasi_dists) / 3))]
         seed_x_3 = [
             42 for i in range(int(len(re_sampler.quasi_dists) / len(circuits_3)))
         ]
