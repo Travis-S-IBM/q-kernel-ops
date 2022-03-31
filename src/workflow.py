@@ -1,10 +1,12 @@
 """Workflow class for controlling all CLI functions."""
 
-import sys
+import sys, os
+import pandas as pd
 from typing import List
-from qiskit_ibm_runtime import SamplerResult, IBMRuntimeService
+from qiskit_ibm_runtime import IBMRuntimeService
 from src.circuits import circuit_2, circuit_5, circuit_10, circuit_18, kernel_circuit
 from src.runtime import run_sampler
+from src.data import kernel_metadata
 
 
 class Workflow:
@@ -50,8 +52,8 @@ class Workflow:
         backend: str = "ibmq_qasm_simulator",
         shots: int = 1024,
         verbose: bool = False,
-    ) -> SamplerResult:
-        """Command for calling body issue parsing function.
+    ) -> [str]:
+        """Command for kernel matrix generation.
 
         Args:
             circuit_tpl_id: list of circuit id to run as template
@@ -66,7 +68,7 @@ class Workflow:
 
         Returns:
             logs output
-            SamplerResult: result of the kernel job
+            Array of data files name
         """
 
         seed_x = []
@@ -123,8 +125,44 @@ class Workflow:
             circuits=kernel_cirq, backend=backend, shots=shots, verbose=verbose
         )
 
-        print(
-            "::set-output name={name}::{value}".format(name="KernelResult", value=run)
+        if verbose:
+            print(
+                "::set-output name={name}::{value}".format(
+                    name="KernelResult", value=run
+                )
+            )
+
+        fea_files = kernel_metadata(
+            circuit_tpl_id=circuit_tpl_id,
+            width=width,
+            layer=layer,
+            shots=shots,
+            seed1=seed_x,
+            seed2=seed_y,
+            runtime_result=run,
         )
 
-        return run
+        return fea_files
+
+    @staticmethod
+    def view_kernel(file_name: str) -> pd.DataFrame:
+        """Commands for decode kernel files.
+
+        Args:
+            file_name: name of the file to decode in resources/kernel_metadata
+
+        Return:
+            Return file_name decode as pandas.Dataframe
+        """
+        local = "../resources/kernel_metadata"
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+
+        data_fea = pd.read_feather("{}/{}/".format(current_dir, local) + file_name)
+
+        print(
+            "::set-output name={name}::{value}".format(
+                name=file_name, value="\n" + str(data_fea)
+            )
+        )
+
+        return data_fea
