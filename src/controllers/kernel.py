@@ -10,7 +10,6 @@
 """
 
 import sys
-from typing import List
 
 from src.circuits import circuit_2, circuit_5, circuit_10, circuit_18, kernel_circuit
 from src.data import kernel_metadata
@@ -19,11 +18,10 @@ from src.runtime import run_sampler
 
 def kernel_endpoint(
     circuit_tpl_id: [int],
+    seed_x: [int],
+    seed_y: [int],
     width: int = 4,
     layer: int = 1,
-    seed1: int = 42,
-    seed2: int = 4242,
-    matrix_size: List[int] = None,
     backend: str = "ibmq_qasm_simulator",
     shots: int = 1024,
     verbose: bool = False,
@@ -34,9 +32,8 @@ def kernel_endpoint(
         circuit_tpl_id: list of circuit id to run as template
         width: number of qubits
         layer: number of reps for the tpl
-        seed1: seed for x axes
-        seed2: seed for y axes
-        matrix_size: matrix size for seed coordinate [x, y]
+        seed_x: seed for x axes
+        seed_y: seed for y axes
         backend: backend for running circuit
         shots: number of shots for the circuit
         verbose: print all kind of information
@@ -45,27 +42,6 @@ def kernel_endpoint(
         logs output
         Array of data files name
     """
-
-    seed_x = []
-    seed_y = []
-
-    if matrix_size is not None:
-        if matrix_size[0] != matrix_size[1]:
-            print(
-                """
-            The coordinate have to be square.
-            Ex. [2,2] or [5,5]
-            """
-            )
-            sys.exit(1)
-        for x_axe in range(matrix_size[0] + 1):
-            for y_axe in range(matrix_size[1] + 1):
-                seed_x.append(x_axe)
-                seed_y.append(y_axe)
-    else:
-        seed_x.append(seed1)
-        seed_y.append(seed2)
-
     circuit_tpl = []
     for tpl_id in circuit_tpl_id:
         if tpl_id == 2:

@@ -1,6 +1,7 @@
 """Workflow class for controlling all CLI functions."""
 
 import os
+import sys
 from typing import List
 
 import pandas as pd
@@ -69,13 +70,32 @@ class Workflow:
         Returns:
             Array of data files name
         """
+        seed_x = []
+        seed_y = []
+
+        if matrix_size is not None:
+            if matrix_size[0] != matrix_size[1]:
+                print(
+                    """
+                The coordinate have to be square.
+                Ex. [2,2] or [5,5]
+                """
+                )
+                sys.exit(1)
+            for x_axe in range(matrix_size[0] + 1):
+                for y_axe in range(matrix_size[1] + 1):
+                    seed_x.append(x_axe)
+                    seed_y.append(y_axe)
+        else:
+            seed_x.append(seed1)
+            seed_y.append(seed2)
+
         return kernel_endpoint(
             circuit_tpl_id=circuit_tpl_id,
             width=width,
             layer=layer,
-            seed1=seed1,
-            seed2=seed2,
-            matrix_size=matrix_size,
+            seed_x=seed_x,
+            seed_y=seed_y,
             backend=backend,
             shots=shots,
             verbose=verbose,

@@ -1,6 +1,6 @@
 """Tests for CLI commands."""
-import pandas as pd
 from unittest import TestCase
+import pandas as pd
 from src.workflow import Workflow
 
 
