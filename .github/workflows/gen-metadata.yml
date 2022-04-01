@@ -1,0 +1,49 @@
+name: Gen metadata files
+
+on:
+  workflow_dispatch:
+    inputs:
+      circuit_id:
+        description: 'Circuit id -> 2, 5, 10 or 18'
+        required: true
+        default: '2'
+      shots:
+        description: 'Nb of shots -> 512, 1024, 8000'
+        required: true
+        default: '1024'
+        
+jobs:
+  gen-metadata:
+    name: Gen metadata
+    concurrency: ci-metadata
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # otherwise, there would be errors pushing refs to the destination repository.
+    - name: Set up Python ${{ env.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.9"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Set vars env
+      env:
+        QTOKEN: ${{ secrets.QUANTUM_SERVICES_TOKEN }}
+        CIRCUIT_ID: ${{ github.event.inputs.circuit_id }}
+        SHOTS: ${{ github.event.inputs.shots }}
+        
+    - name: Authentication
+      run: |
+        python worflow.py authentication --auth="legacy" --token="${QTOKEN}" --instance="ibm-q/open/main"
+    - name: Generate metadata
+      run: |
+        python worflow.py kernel_flow --circuit_tpl_id=[${CIRCUIT_ID}] --matrix_size=[100,100] --shots=${SHOTS}
+        
+    - name: Pull modif
+      run: git pull
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: Automation gen metadata files
