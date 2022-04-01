@@ -36,7 +36,7 @@ def kernel_circuit(
 
     kernel_cirq = QuantumCircuit(template.num_qubits)
     kernel_cirq.append(
-        template.inverse().bind_parameters(x_axe), list(range(template.num_qubits))
+        template.bind_parameters(x_axe), list(range(template.num_qubits))
     )
     kernel_cirq.append(
         template.inverse().bind_parameters(y_axe), list(range(template.num_qubits))
