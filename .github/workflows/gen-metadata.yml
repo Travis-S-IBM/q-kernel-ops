@@ -7,6 +7,10 @@ on:
         description: 'Circuit id -> 2, 5, 10 or 18'
         required: true
         default: '2'
+      matrix_size:
+        description: 'Matrix size -> 2, 10, 50'
+        required: true
+        default: '2'
       shots:
         description: 'Nb of shots -> 512, 1024, 8000'
         required: true
@@ -39,8 +43,9 @@ jobs:
       env:
         CIRCUIT_ID: ${{ github.event.inputs.circuit_id }}
         SHOTS: ${{ github.event.inputs.shots }}
+        MATRIX_SIZE: ${{ github.event.inputs.matrix_size }}
       run: |
-        python worflow.py kernel_flow --circuit_tpl_id=[${CIRCUIT_ID}] --matrix_size=[100,100] --shots=${SHOTS}
+        python worflow.py kernel_flow --circuit_tpl_id=[${CIRCUIT_ID}] --matrix_size=[${MATRIX_SIZE},${MATRIX_SIZE}] --shots=${SHOTS}
         
     - name: Pull modif
       run: git pull
