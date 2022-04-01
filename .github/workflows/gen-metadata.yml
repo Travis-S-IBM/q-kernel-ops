@@ -29,16 +29,16 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Set vars env
-      env:
-        QTOKEN: ${{ secrets.QUANTUM_SERVICES_TOKEN }}
-        CIRCUIT_ID: ${{ github.event.inputs.circuit_id }}
-        SHOTS: ${{ github.event.inputs.shots }}
         
     - name: Authentication
+      env:
+        QS_TOKEN: ${{ secrets.QUANTUM_SERVICES_TOKEN }}
       run: |
-        python worflow.py authentication --auth="legacy" --token="${QTOKEN}" --instance="ibm-q/open/main"
+        python worflow.py authentication --auth="legacy" --token="${QS_TOKEN}" --instance="ibm-q/open/main"
     - name: Generate metadata
+      env:
+        CIRCUIT_ID: ${{ github.event.inputs.circuit_id }}
+        SHOTS: ${{ github.event.inputs.shots }}
       run: |
         python worflow.py kernel_flow --circuit_tpl_id=[${CIRCUIT_ID}] --matrix_size=[100,100] --shots=${SHOTS}
         
