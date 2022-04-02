@@ -7,14 +7,26 @@ on:
         description: 'Circuit id -> 2, 5, 10 or 18'
         required: true
         default: '2'
+      width:
+        description: 'Nb of qubits -> 4, 5, 10'
+        required: true
+        default: '4'
+      layer:
+        description: 'Nb of tpl reps -> 1, 2, 3'
+        required: true
+        default: '1'
       matrix_size:
         description: 'Matrix size -> 2, 10, 50'
         required: true
-        default: '2'
+        default: '25'
       shots:
         description: 'Nb of shots -> 512, 1024, 8000'
         required: true
         default: '1024'
+      backend:
+        description: 'backend -> ibmq_qasm_simulator or '
+        required: true
+        default: 'ibmq_qasm_simulator'
         
 jobs:
   gen-metadata:
@@ -45,8 +57,11 @@ jobs:
         CIRCUIT_ID: ${{ github.event.inputs.circuit_id }}
         SHOTS: ${{ github.event.inputs.shots }}
         MATRIX_SIZE: ${{ github.event.inputs.matrix_size }}
+        NB_QUBITS: ${{ github.event.inputs.width }}
+        LAYER: ${{ github.event.inputs.layer }}
+        BACKEND: ${{ github.event.inputs.backend }}
       run: |
-        python worflow.py kernel_flow --circuit_tpl_id=[${CIRCUIT_ID}] --matrix_size=[${MATRIX_SIZE},${MATRIX_SIZE}] --shots=${SHOTS}
+        python worflow.py kernel_flow --circuit_tpl_id=[${CIRCUIT_ID}] --width=${NB_QUBITS} --layer=${LAYER} --matrix_size=[${MATRIX_SIZE},${MATRIX_SIZE}] --backend="${BACKEND}" --shots=${SHOTS}
         
     - name: Pull modif
       run: git pull
