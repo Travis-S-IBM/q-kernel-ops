@@ -10,7 +10,7 @@ def authentication():
     """Authentication function."""
     QS_TOKEN = os.environ.get("QS_TOKEN")
     if QS_TOKEN is not None:
-        Workflow.authentication(auth="legacy", token=QS_TOKEN)
+        Workflow.authentication(auth="legacy", token=QS_TOKEN, overwrite=True)
 
 
 class TestUtils(TestCase):
