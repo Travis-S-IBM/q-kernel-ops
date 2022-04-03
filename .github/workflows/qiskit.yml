@@ -42,6 +42,8 @@ jobs:
         pip install qiskit --upgrade
     - name: Test using tox envs
       if: ${{ env.PASS == 'True' }}
+      env:
+        QS_TOKEN: ${{ secrets.QUANTUM_SERVICES_TOKEN }}
       run: |
         tox ${{ env.TOX_ENV }}
 
@@ -88,5 +90,7 @@ jobs:
         pip install .
     - name: Test using tox envs
       if: ${{ env.PASS == 'True' }}
+      env:
+        QS_TOKEN: ${{ secrets.QUANTUM_SERVICES_TOKEN }}
       run: |
         tox ${{ env.TOX_ENV }}
