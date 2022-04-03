@@ -16,6 +16,63 @@ from src.data import kernel_metadata
 from src.runtime import run_sampler
 
 
+def gen_circuits_tpl(
+    circuit_tpl_id: [int], width: int = 4, layer: int = 1, verbose: bool = False
+) -> list:
+    """Function to gen template circuits.
+
+    Args:
+        circuit_tpl_id: list of circuit id to run as template
+        width: number of qubits
+        layer: number of reps for the tpl
+        verbose: print all kind of information
+    Returns:
+        List of template quantum circuits
+    """
+    circuits_tpl = []
+    for tpl_id in circuit_tpl_id:
+        if tpl_id == 2:
+            circuits_tpl.append(circuit_2(width=width, layer=layer, verbose=verbose))
+        elif tpl_id == 5:
+            circuits_tpl.append(circuit_5(width=width, layer=layer, verbose=verbose))
+        elif tpl_id == 10:
+            circuits_tpl.append(circuit_10(width=width, layer=layer, verbose=verbose))
+        elif tpl_id == 18:
+            circuits_tpl.append(circuit_18(width=width, layer=layer, verbose=verbose))
+        else:
+            print("Please chooce a circuit_tpl_id between [2, 5, 10, 18, X]")
+            sys.exit(1)
+
+    return circuits_tpl
+
+
+def gen_kernel_circuits(
+    circuits_tpl: list, seed_x: [int], seed_y: [int], verbose: bool = False
+) -> list:
+    """Function to generate the kernel circuits.
+
+    Args:
+        circuits_tpl: list of template quantum circuits
+        seed_x: seed for x axes
+        seed_y: seed for y axes
+        verbose: print all kind of information
+    Return:
+        list of kernel circuits
+    """
+    kernel_cirq = []
+    for tpl in circuits_tpl:
+        for index, _ in enumerate(seed_x):
+            kernel_cirq.append(
+                kernel_circuit(
+                    circuit=tpl,
+                    seed1=seed_x[index],
+                    seed2=seed_y[index],
+                    verbose=verbose,
+                )
+            )
+    return kernel_cirq
+
+
 def kernel_endpoint(
     circuit_tpl_id: [int],
     seed_x: [int],
@@ -42,31 +99,13 @@ def kernel_endpoint(
         logs output
         Array of data files name
     """
-    circuit_tpl = []
-    for tpl_id in circuit_tpl_id:
-        if tpl_id == 2:
-            circuit_tpl.append(circuit_2(width=width, layer=layer, verbose=verbose))
-        elif tpl_id == 5:
-            circuit_tpl.append(circuit_5(width=width, layer=layer, verbose=verbose))
-        elif tpl_id == 10:
-            circuit_tpl.append(circuit_10(width=width, layer=layer, verbose=verbose))
-        elif tpl_id == 18:
-            circuit_tpl.append(circuit_18(width=width, layer=layer, verbose=verbose))
-        else:
-            print("Please chooce a circuit_tpl_id between [2, 5, 10, 18, X]")
-            sys.exit(1)
+    circuits_tpl = gen_circuits_tpl(
+        circuit_tpl_id=circuit_tpl_id, width=width, layer=layer, verbose=verbose
+    )
 
-    kernel_cirq = []
-    for tpl in circuit_tpl:
-        for index, _ in enumerate(seed_x):
-            kernel_cirq.append(
-                kernel_circuit(
-                    circuit=tpl,
-                    seed1=seed_x[index],
-                    seed2=seed_y[index],
-                    verbose=verbose,
-                )
-            )
+    kernel_cirq = gen_kernel_circuits(
+        circuits_tpl=circuits_tpl, seed_x=seed_x, seed_y=seed_y, verbose=verbose
+    )
 
     run = run_sampler(
         circuits=kernel_cirq, backend=backend, shots=shots, verbose=verbose

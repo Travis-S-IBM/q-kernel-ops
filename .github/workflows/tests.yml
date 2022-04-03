@@ -52,6 +52,8 @@ jobs:
         pip install -r requirements.txt
         pip install -r requirements-dev.txt
     - name: Test using tox envs
+      env:
+        QS_TOKEN: ${{ secrets.QUANTUM_SERVICES_TOKEN }}
       run: |
         tox ${{ env.TOX_ENV }}
   coverage:
