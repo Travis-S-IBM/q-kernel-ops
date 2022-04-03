@@ -2,3 +2,4 @@ fire==0.4.0
 qiskit
 qiskit_ibm_runtime
 pandas==1.4.1
+pyarrow
