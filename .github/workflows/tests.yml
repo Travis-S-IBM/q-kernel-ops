@@ -71,6 +71,8 @@ jobs:
         pip install -r requirements-dev.txt
         curl https://raw.githubusercontent.com/qiskit-community/ecosystem/main/ecosystem/templates/.coveragerc > .coveragerc
     - name: Run coverage
+      env:
+        QS_TOKEN: ${{ secrets.QUANTUM_SERVICES_TOKEN }}
       run: |
         tox -ecoverage
   black:
