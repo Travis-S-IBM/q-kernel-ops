@@ -3,7 +3,7 @@ from unittest import TestCase
 from src.runtime import run_sampler
 from src.circuits import circuit_2, circuit_5, kernel_circuit
 from qiskit_ibm_runtime import SamplerResult
-from tests.workflow import authentication
+from tests.test_workflow import authentication
 
 
 class TestUtils(TestCase):

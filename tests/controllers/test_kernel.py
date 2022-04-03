@@ -1,7 +1,7 @@
 """Tests for Kernel commands."""
 from unittest import TestCase
 from src.controllers import kernel_endpoint, gen_circuits_tpl, gen_kernel_circuits
-from tests.workflow import authentication
+from tests.test_workflow import authentication
 
 
 class TestUtils(TestCase):
