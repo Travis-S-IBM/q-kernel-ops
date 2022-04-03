@@ -1,8 +1,8 @@
 """Tests for Kernel commands."""
 from unittest import TestCase
+from qiskit_ibm_runtime import SamplerResult
 from src.runtime import run_sampler
 from src.circuits import circuit_2, circuit_5, kernel_circuit
-from qiskit_ibm_runtime import SamplerResult
 from tests.test_workflow import authentication
 
 
