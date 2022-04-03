@@ -8,9 +8,9 @@ from src.workflow import Workflow
 
 def authentication():
     """Authentication function."""
-    QS_TOKEN = os.environ.get("QS_TOKEN")
-    if QS_TOKEN is not None:
-        Workflow.authentication(auth="legacy", token=QS_TOKEN, overwrite=True)
+    qs_token = os.environ.get("QS_TOKEN")
+    if qs_token is not None:
+        Workflow.authentication(auth="legacy", token=qs_token, overwrite=True)
 
 
 class TestUtils(TestCase):
