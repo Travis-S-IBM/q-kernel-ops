@@ -129,7 +129,7 @@ class Workflow:
 
     @staticmethod
     def view_telemetry(file_name: str = "telemetry_info.csv") -> pd.DataFrame:
-        """Commands for decode kernel files.
+        """Commands for decode telemetry files.
 
         Args:
             file_name: name of the file to decode in resources/kernel_metadata

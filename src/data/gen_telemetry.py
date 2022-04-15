@@ -22,7 +22,7 @@ def kernel_telemetry(
     width: int,
     layer: int,
 ) -> str:
-    """Function generate kernel metadata files.
+    """Function generate telemetry metadata files.
 
     Args:
         circuit_tpl_id: list of circuit id to run as template
@@ -34,7 +34,7 @@ def kernel_telemetry(
         layer: number of reps for the tpl
 
     Returns:
-        Array of data files name
+        Telemetry file name
     """
     data_name = "telemetry_info.csv"
     current_dir = os.path.dirname(os.path.abspath(__file__))

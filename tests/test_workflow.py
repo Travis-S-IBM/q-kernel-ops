@@ -38,3 +38,8 @@ class TestUtils(TestCase):
         """Test to test the view kernel command."""
         data_file = Workflow.view_kernel(file_name="kernels-2-ideal.csv")
         self.assertTrue(isinstance(data_file, pd.DataFrame))
+
+    def test_view_telemetry(self):
+        """Test to test the view telemetry command."""
+        data_file = Workflow.view_telemetry()
+        self.assertTrue(isinstance(data_file, pd.DataFrame))
