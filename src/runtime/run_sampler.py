@@ -27,7 +27,7 @@ def run_sampler(
     Return:
         Result from the running
     """
-    if backend != "statevector_simulator":
+    if backend != "simulator_statevector":
         for cirq in circuits:
             cirq.measure_all()
 
