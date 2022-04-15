@@ -1,0 +1,36 @@
+#
+# github.com/Travis-/q-kernel-ops/image
+#
+# to build multi-arch images of QML kernel algorithm
+#
+FROM registry.access.redhat.com/ubi8/ubi:latest
+ARG ANACONDA_INSTALLER=Anaconda3-2021.11-Linux-s390x.sh
+
+RUN  dnf install -y wget gcc gcc-c++ make cmake blas64 lapack64 openssl-devel suitesparse && \
+     dnf install -y --enablerepo=codeready-builder-for-rhel-8-s390x-rpms \
+         blas-devel lapack-devel suitesparse-devel
+
+RUN wget https://repo.anaconda.com/archive/$ANACONDA_INSTALLER
+
+RUN bash ./$ANACONDA_INSTALLER -b && \
+    source /root/anaconda3/bin/activate && \
+    /root/anaconda3/bin/conda init
+
+RUN source /root/.bashrc       && \
+    pip install qiskit-terra   && \
+    pip install qiskit-aer     && \
+    pip install qiskit-ignis   && \
+    pip install qiskit-nature  && \
+    pip install qiskit-finance && \
+    pip install qiskit-machine-learning && \
+    pip install qiskit-ibmq-provider && \
+    pip install chompack
+
+COPY requirements-dev.txt .
+COPY requirements.txt .
+
+
+RUN source /root/.bashrc       && \
+    pip install -r requirements-dev.txt && \
+    pip install -r requirements.txt
+   
