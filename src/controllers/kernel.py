@@ -123,5 +123,6 @@ def kernel_endpoint(
         shots=shots,
         seed1=seed_x,
         seed2=seed_y,
+        backend=backend,
         runtime_result=run,
     )

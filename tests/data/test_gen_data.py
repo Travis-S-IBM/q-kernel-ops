@@ -26,6 +26,7 @@ class TestUtils(TestCase):
             shots=1024,
             seed1=seed_x_2,
             seed2=seed_y_2,
+            backend="ibmq_qasm_simulator",
             runtime_result=re_sampler,
         )
         self.assertTrue(isinstance(fea_files_2, List))
@@ -45,6 +46,7 @@ class TestUtils(TestCase):
             shots=1024,
             seed1=seed_x_3,
             seed2=seed_y_3,
+            backend="ibmq_qasm_simulator",
             runtime_result=re_sampler,
         )
         self.assertTrue(isinstance(fea_files_3, List))

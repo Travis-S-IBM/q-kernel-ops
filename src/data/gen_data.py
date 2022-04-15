@@ -21,6 +21,7 @@ def kernel_metadata(
     shots: int,
     seed1: [int],
     seed2: [int],
+    backend: str,
     runtime_result: SamplerResult,
 ) -> [str]:
     """Function generate kernel metadata files.
@@ -32,6 +33,7 @@ def kernel_metadata(
         shots: number of shots for the circuit
         seed1: seed for x axes
         seed2: seed for y axes
+        backend: backend used for the experiment
         runtime_result: result for runtime
 
     Returns:
@@ -69,7 +71,10 @@ def kernel_metadata(
 
         data_name = "kernels-" + str(circuit) + "-ideal.csv"
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        dest = "../../resources/kernel_metadata"
+        dest = "../../resources/kernel_metadata/" + backend
+        if not os.path.isdir("{}/{}/".format(current_dir, dest)):
+            os.mkdir("{}/{}/".format(current_dir, dest))
+
         data_fea.to_feather("{}/{}/".format(current_dir, dest) + data_name)
 
         files.append(data_name)
