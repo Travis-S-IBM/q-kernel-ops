@@ -102,16 +102,19 @@ class Workflow:
         )
 
     @staticmethod
-    def view_kernel(file_name: str) -> pd.DataFrame:
+    def view_kernel(
+        file_name: str, backend: str = "ibmq_qasm_simulator"
+    ) -> pd.DataFrame:
         """Commands for decode kernel files.
 
         Args:
             file_name: name of the file to decode in resources/kernel_metadata
+            backend: backend of the experiment of the resource file
 
         Return:
             Return file_name decode as pandas.Dataframe
         """
-        local = "../resources/kernel_metadata"
+        local = "../resources/kernel_metadata/" + backend
         current_dir = os.path.dirname(os.path.abspath(__file__))
 
         data_fea = pd.read_feather("{}/{}/".format(current_dir, local) + file_name)

@@ -1,5 +1,5 @@
 # Tests resources
-resources/kernel_metadata/kernels-90*-ideal.csv
+resources/kernel_metadata/*/kernels-90*-ideal.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
