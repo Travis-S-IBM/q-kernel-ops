@@ -26,6 +26,11 @@ cp ../requirements*.txt .
 sed -i 's/pyarrow//g' requirements.txt
 
 podman build .  -t quay.io/qiskit/qmlbuild:${TAG} --build-arg=ANCONDA_INSTALLER=${ANACONDA_INSTALLER} --file=Dockerbuild
-
 podman push quay.io/qiskit/qmlbuild:${TAG}
 
+rm requirements*.txt
+
+cp -r ../src .
+cp ../worflow.py .
+
+podman build .  -t quay.io/qiskit/qmlrun:${TAG} --file=Dockerfile
