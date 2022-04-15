@@ -13,14 +13,16 @@ class TestUtils(TestCase):
         """Test for run sampler function."""
         authentication()
         kernel_cirq = [kernel_circuit(circuit_2(), 42, 4242)]
-        run = run_sampler(circuits=kernel_cirq)
+        run, telemetry_info = run_sampler(circuits=kernel_cirq)
         self.assertTrue(isinstance(run, SamplerResult))
         self.assertEqual(len(kernel_cirq), len(run.quasi_dists))
+        self.assertTrue(list(telemetry_info))
 
         kernel_cirq = [
             kernel_circuit(circuit_2(), 42, 4242),
             kernel_circuit(circuit_5(), 24, 2424),
         ]
-        run = run_sampler(circuits=kernel_cirq)
+        run, telemetry_info = run_sampler(circuits=kernel_cirq)
         self.assertTrue(isinstance(run, SamplerResult))
         self.assertEqual(len(kernel_cirq), len(run.quasi_dists))
+        self.assertTrue(list(telemetry_info))

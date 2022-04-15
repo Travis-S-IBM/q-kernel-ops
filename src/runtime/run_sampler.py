@@ -8,6 +8,8 @@
 #
 #############################################
 """
+from typing import Tuple, List
+from time import time
 
 from qiskit_ibm_runtime import IBMRuntimeService, IBMSampler, SamplerResult
 from qiskit import QuantumCircuit
@@ -15,7 +17,7 @@ from qiskit import QuantumCircuit
 
 def run_sampler(
     circuits: [QuantumCircuit], backend="ibmq_qasm_simulator", shots=1024, verbose=False
-) -> SamplerResult:
+) -> Tuple[SamplerResult, List[str, float, float]]:
     """Function to run the final circuit on quantum computer.
 
     Args:
@@ -35,8 +37,18 @@ def run_sampler(
     sampler_factory = IBMSampler(service=service, backend=backend)
 
     with sampler_factory(circuits=circuits) as sampler:
+        start_time = time()
         result = sampler(circuit_indices=list(range(len(circuits))), shots=shots)
+
+        while result.status() == "in queue":
+            pass
+        time_queue = time() - start_time
+        while result.status() == "running":
+            pass
+        time_simu = time() - time_queue
+
         if verbose:
             print(result)
 
-        return result
+        telemetry_info = [result.job_id, time_queue, time_simu]
+        return result, telemetry_info

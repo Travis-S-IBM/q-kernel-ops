@@ -16,8 +16,8 @@ import pandas as pd
 def kernel_telemetry(
     circuit_tpl_id: [int],
     job_id: str,
-    time_queue: int,
-    time_simu: int,
+    time_queue: float,
+    time_simu: float,
     payload_size: int,
     width: int,
     layer: int,
@@ -75,7 +75,6 @@ def kernel_telemetry(
         "payload_size": list_payload_size,
     }
 
-    print(fea_file)
     data_fea = pd.DataFrame(fea_file)
 
     data_fea.to_feather("{}/{}/".format(current_dir, dest) + data_name)
