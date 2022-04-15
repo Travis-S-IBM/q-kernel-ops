@@ -126,3 +126,26 @@ class Workflow:
         )
 
         return data_fea
+
+    @staticmethod
+    def view_telemetry(file_name: str = "telemetry_info.csv") -> pd.DataFrame:
+        """Commands for decode kernel files.
+
+        Args:
+            file_name: name of the file to decode in resources/kernel_metadata
+
+        Return:
+            Return file_name decode as pandas.Dataframe
+        """
+        local = "../resources/kernel_metadata/"
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+
+        data_fea = pd.read_feather("{}/{}/".format(current_dir, local) + file_name)
+
+        print(
+            "::set-output name={name}::{value}".format(
+                name=file_name, value="\n" + str(data_fea)
+            )
+        )
+
+        return data_fea
