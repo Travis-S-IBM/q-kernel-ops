@@ -83,7 +83,7 @@ class Workflow:
                 )
                 sys.exit(1)
             for x_axe in range(matrix_size[0] + 1):
-                for y_axe in range(matrix_size[1] + 1):
+                for y_axe in range(x_axe+1):
                     seed_x.append(x_axe)
                     seed_y.append(y_axe)
         else:
