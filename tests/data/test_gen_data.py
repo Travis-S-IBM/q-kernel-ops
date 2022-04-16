@@ -11,12 +11,12 @@ class TestUtils(TestCase):
     def test_kernel_metadata(self):
         """Test to test the kernel metadata function."""
         re_sampler = return_sampler.get_sampler()
-        circuits_2 = list(range(901, 901 + int(len(re_sampler.quasi_dists) / 2)))
+        circuits_2 = list(range(901, 901 + int(len(re_sampler["quasi_dists"]) / 2)))
         seed_x_2 = [
-            42 for i in range(int(len(re_sampler.quasi_dists) / len(circuits_2)))
+            42 for i in range(int(len(re_sampler["quasi_dists"]) / len(circuits_2)))
         ]
         seed_y_2 = [
-            4242 for i in range(int(len(re_sampler.quasi_dists) / len(circuits_2)))
+            4242 for i in range(int(len(re_sampler["quasi_dists"]) / len(circuits_2)))
         ]
 
         fea_files_2 = kernel_metadata(
@@ -31,12 +31,12 @@ class TestUtils(TestCase):
         )
         self.assertTrue(isinstance(fea_files_2, List))
 
-        circuits_3 = list(range(901, 901 + int(len(re_sampler.quasi_dists) / 3)))
+        circuits_3 = list(range(901, 901 + int(len(re_sampler["quasi_dists"]) / 3)))
         seed_x_3 = [
-            42 for i in range(int(len(re_sampler.quasi_dists) / len(circuits_3)))
+            42 for i in range(int(len(re_sampler["quasi_dists"]) / len(circuits_3)))
         ]
         seed_y_3 = [
-            4242 for i in range(int(len(re_sampler.quasi_dists) / len(circuits_3)))
+            4242 for i in range(int(len(re_sampler["quasi_dists"]) / len(circuits_3)))
         ]
 
         fea_files_3 = kernel_metadata(

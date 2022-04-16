@@ -11,7 +11,6 @@
 
 import os
 import pandas as pd
-from qiskit_ibm_runtime import SamplerResult
 
 
 def kernel_metadata(
@@ -22,7 +21,7 @@ def kernel_metadata(
     seed1: [int],
     seed2: [int],
     backend: str,
-    runtime_result: SamplerResult,
+    runtime_result: dict,
 ) -> [str]:
     """Function generate kernel metadata files.
 

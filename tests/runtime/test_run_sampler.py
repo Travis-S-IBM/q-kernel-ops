@@ -1,6 +1,5 @@
 """Tests for Kernel commands."""
 from unittest import TestCase
-from qiskit_ibm_runtime import SamplerResult
 from src.runtime import run_sampler
 from src.circuits import circuit_2, circuit_5, kernel_circuit
 from tests.test_workflow import authentication
@@ -14,8 +13,8 @@ class TestUtils(TestCase):
         authentication()
         kernel_cirq = [kernel_circuit(circuit_2(), 42, 4242)]
         run, telemetry_info = run_sampler(circuits=kernel_cirq)
-        self.assertTrue(isinstance(run, SamplerResult))
-        self.assertEqual(len(kernel_cirq), len(run.quasi_dists))
+        self.assertTrue(isinstance(run, dict))
+        self.assertEqual(len(kernel_cirq), len(run["quasi_dists"]))
         self.assertTrue(list(telemetry_info))
 
         kernel_cirq = [
@@ -23,6 +22,6 @@ class TestUtils(TestCase):
             kernel_circuit(circuit_5(), 24, 2424),
         ]
         run, telemetry_info = run_sampler(circuits=kernel_cirq)
-        self.assertTrue(isinstance(run, SamplerResult))
-        self.assertEqual(len(kernel_cirq), len(run.quasi_dists))
+        self.assertTrue(isinstance(run, dict))
+        self.assertEqual(len(kernel_cirq), len(run["quasi_dists"]))
         self.assertTrue(list(telemetry_info))

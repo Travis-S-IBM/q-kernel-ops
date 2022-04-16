@@ -1,12 +1,11 @@
 """Generate sampler return."""
 from ast import literal_eval
-from qiskit_ibm_runtime import SamplerResult
 
 
-def get_sampler() -> SamplerResult:
+def get_sampler() -> dict:
     """Function to get a sample of SamplerResult object."""
-    data = SamplerResult(
-        quasi_dists=[
+    data = {
+        "quasi_dists": [
             literal_eval(
                 "{'1011':0.00390625,'0001':0.005859375,'0010':0.017578125,'1001':0.0029296875,"
                 "'1000':0.0068359375,'1100':0.173828125,'1010':0.0234375,'1111':0.19140625,"
@@ -44,7 +43,7 @@ def get_sampler() -> SamplerResult:
                 "'0110':0.0634765625,'0100':0.1728515625}"
             ),
         ],
-        metadata=[
+        "metadata": [
             literal_eval("{'header_metadata': None, 'shots': 1024}"),
             literal_eval("{'header_metadata': None, 'shots': 1024}"),
             literal_eval("{'header_metadata': None, 'shots': 1024}"),
@@ -52,5 +51,5 @@ def get_sampler() -> SamplerResult:
             literal_eval("{'header_metadata': None, 'shots': 1024}"),
             literal_eval("{'header_metadata': None, 'shots': 1024}"),
         ],
-    )
+    }
     return data

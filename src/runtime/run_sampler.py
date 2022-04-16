@@ -11,13 +11,13 @@
 from typing import Tuple
 from time import time
 
-from qiskit_ibm_runtime import QiskitRuntimeService, SamplerResult
+from qiskit_ibm_runtime import QiskitRuntimeService
 from qiskit import QuantumCircuit
 
 
 def run_sampler(
     circuits: [QuantumCircuit], backend="ibmq_qasm_simulator", shots=1024, verbose=False
-) -> Tuple[SamplerResult, list]:
+) -> Tuple[dict, list]:
     """Function to run the final circuit on quantum computer.
 
     Args:
