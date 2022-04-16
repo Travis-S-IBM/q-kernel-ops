@@ -30,7 +30,9 @@ class Workflow:
         """Commands for authentication.
 
         Args:
-            channel: if you have a Cloud account : "ibm_cloud", is you have an Quantum account "ibm_quantum"
+            channel:
+                if you have a Cloud account : "ibm_cloud",
+                if you have an Quantum account "ibm_quantum"
             token: your IBM Cloud/Quantum token
             instance: group path for computer access
             overwrite: set True if you want to overwrite your actual token
