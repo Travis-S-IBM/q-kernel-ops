@@ -11,7 +11,6 @@
 
 import os
 import pandas as pd
-from qiskit_ibm_runtime import SamplerResult
 
 
 def kernel_metadata(
@@ -22,7 +21,7 @@ def kernel_metadata(
     seed1: [int],
     seed2: [int],
     backend: str,
-    runtime_result: SamplerResult,
+    runtime_result: dict,
 ) -> [str]:
     """Function generate kernel metadata files.
 
@@ -48,14 +47,16 @@ def kernel_metadata(
     for circ_index, circuit in enumerate(circuit_tpl_id):
         fidelity = []
         min_lim = int(
-            circ_index * len(runtime_result.quasi_dists) / len(circuit_tpl_id)
+            circ_index * len(runtime_result["quasi_dists"]) / len(circuit_tpl_id)
         )
-        max_lim = int(len(runtime_result.quasi_dists) / len(circuit_tpl_id) + min_lim)
+        max_lim = int(
+            len(runtime_result["quasi_dists"]) / len(circuit_tpl_id) + min_lim
+        )
         for i in range(min_lim, max_lim):
-            if runtime_result.quasi_dists[i].get(wanted_result) is not None:
-                fidelity.append(runtime_result.quasi_dists[i][wanted_result])
-            elif runtime_result.quasi_dists[i].get("0") is not None:
-                fidelity.append(runtime_result.quasi_dists[i]["0"])
+            if runtime_result["quasi_dists"][i].get(wanted_result) is not None:
+                fidelity.append(runtime_result["quasi_dists"][i][wanted_result])
+            elif runtime_result["quasi_dists"][i].get("0") is not None:
+                fidelity.append(runtime_result["quasi_dists"][i]["0"])
             else:
                 fidelity.append(0)
 

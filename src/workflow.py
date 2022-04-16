@@ -5,7 +5,7 @@ import sys
 from typing import List
 
 import pandas as pd
-from qiskit_ibm_runtime import IBMRuntimeService
+from qiskit_ibm_runtime import QiskitRuntimeService
 
 from src.controllers import kernel_endpoint
 
@@ -17,7 +17,7 @@ class Workflow:
     Each public method of this class is CLI command
     and arguments for method are options/flags for this command.
 
-    Ex: `python worflow.py kernel_flow --circuit_tpl_id=[2,5]`
+    Ex: `python workflow.py kernel_flow --circuit_tpl_id=[2,5]`
     """
 
     def __init__(self):
@@ -25,12 +25,14 @@ class Workflow:
 
     @staticmethod
     def authentication(
-        auth: str, token: str, instance="ibm-q/open/main", overwrite=False
+        channel: str, token: str, instance="ibm-q/open/main", overwrite=False
     ) -> None:
         """Commands for authentication.
 
         Args:
-            auth: if you have a Cloud account : "cloud", is you have an Quantum account "legacy"
+            channel:
+                if you have a Cloud account : "ibm_cloud",
+                if you have an Quantum account "ibm_quantum"
             token: your IBM Cloud/Quantum token
             instance: group path for computer access
             overwrite: set True if you want to overwrite your actual token
@@ -38,8 +40,8 @@ class Workflow:
         Return:
             Register the session in disk space
         """
-        IBMRuntimeService.save_account(
-            auth=auth, token=token, instance=instance, overwrite=overwrite
+        QiskitRuntimeService.save_account(
+            channel=channel, token=token, instance=instance, overwrite=overwrite
         )
 
     @staticmethod
@@ -115,6 +117,29 @@ class Workflow:
             Return file_name decode as pandas.Dataframe
         """
         local = "../resources/kernel_metadata/" + backend
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+
+        data_fea = pd.read_feather("{}/{}/".format(current_dir, local) + file_name)
+
+        print(
+            "::set-output name={name}::{value}".format(
+                name=file_name, value="\n" + str(data_fea)
+            )
+        )
+
+        return data_fea
+
+    @staticmethod
+    def view_telemetry(file_name: str = "telemetry_info.csv") -> pd.DataFrame:
+        """Commands for decode telemetry files.
+
+        Args:
+            file_name: name of the file to decode in resources/kernel_metadata
+
+        Return:
+            Return file_name decode as pandas.Dataframe
+        """
+        local = "../resources/kernel_metadata/"
         current_dir = os.path.dirname(os.path.abspath(__file__))
 
         data_fea = pd.read_feather("{}/{}/".format(current_dir, local) + file_name)
