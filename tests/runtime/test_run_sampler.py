@@ -16,6 +16,7 @@ class TestUtils(TestCase):
         self.assertTrue(isinstance(run, dict))
         self.assertEqual(len(kernel_cirq), len(run["quasi_dists"]))
         self.assertTrue(list(telemetry_info))
+        self.assertEqual(len(telemetry_info), 3)
 
         kernel_cirq = [
             kernel_circuit(circuit_2(), 42, 4242),
@@ -25,3 +26,4 @@ class TestUtils(TestCase):
         self.assertTrue(isinstance(run, dict))
         self.assertEqual(len(kernel_cirq), len(run["quasi_dists"]))
         self.assertTrue(list(telemetry_info))
+        self.assertEqual(len(telemetry_info), 3)

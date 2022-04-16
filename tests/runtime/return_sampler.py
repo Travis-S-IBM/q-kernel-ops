@@ -1,10 +1,12 @@
 """Generate sampler return."""
 from ast import literal_eval
+from time import time, sleep
+from typing import Tuple
 
 
-def get_sampler() -> dict:
+def get_sampler() -> Tuple[dict, list]:
     """Function to get a sample of SamplerResult object."""
-    data = {
+    run = {
         "quasi_dists": [
             literal_eval(
                 "{'1011':0.00390625,'0001':0.005859375,'0010':0.017578125,'1001':0.0029296875,"
@@ -52,4 +54,10 @@ def get_sampler() -> dict:
             literal_eval("{'header_metadata': None, 'shots': 1024}"),
         ],
     }
-    return data
+    start_time = time()
+    sleep(5)
+    time_queue = time() - start_time
+    sleep(2)
+    time_simu = time() - time_queue - start_time
+    telemetry_info = ["fzgezgrzgz", time_queue, time_simu]
+    return run, telemetry_info

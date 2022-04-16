@@ -55,9 +55,10 @@ def run_sampler(
     time_queue = time() - start_time
     while str(job.status()) == "JobStatus.RUNNING":
         pass
-    time_simu = time() - time_queue
 
     result = job.result()
+    time_simu = time() - time_queue - start_time
+
     if verbose:
         print(result)
 
