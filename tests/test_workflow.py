@@ -1,7 +1,7 @@
 """Tests for CLI commands."""
 import os
 from unittest import TestCase
-from qiskit_ibm_runtime import IBMRuntimeService
+from qiskit_ibm_runtime import QiskitRuntimeService
 import pandas as pd
 from src.workflow import Workflow
 
@@ -10,7 +10,7 @@ def authentication():
     """Authentication function."""
     qs_token = os.environ.get("QS_TOKEN")
     if qs_token is not None:
-        Workflow.authentication(auth="legacy", token=qs_token, overwrite=True)
+        Workflow.authentication(channel="ibm_quantum", token=qs_token, overwrite=True)
 
 
 class TestUtils(TestCase):
@@ -20,7 +20,7 @@ class TestUtils(TestCase):
         """Test for Authentication command."""
         authentication()
 
-        service = IBMRuntimeService()
+        service = QiskitRuntimeService()
         self.assertTrue(service.active_account()["verify"], True)
 
     def test_kernel_flow(self):

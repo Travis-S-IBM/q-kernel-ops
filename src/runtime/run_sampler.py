@@ -11,7 +11,7 @@
 from typing import Tuple
 from time import time
 
-from qiskit_ibm_runtime import IBMRuntimeService, IBMSampler, SamplerResult
+from qiskit_ibm_runtime import QiskitRuntimeService, SamplerResult
 from qiskit import QuantumCircuit
 
 
@@ -33,22 +33,33 @@ def run_sampler(
         for cirq in circuits:
             cirq.measure_all()
 
-    service = IBMRuntimeService()
-    sampler_factory = IBMSampler(service=service, backend=backend)
+    service = QiskitRuntimeService()
+    program_inputs = {
+        "circuits": circuits,
+        "circuit_indices": list(range(len(circuits))),
+        "run_options": {"shots": shots},
+    }
 
-    with sampler_factory(circuits=circuits) as sampler:
-        start_time = time()
-        result = sampler(circuit_indices=list(range(len(circuits))), shots=shots)
+    options = {"backend_name": backend}
 
-        while result.status() == "in queue":
-            pass
-        time_queue = time() - start_time
-        while result.status() == "running":
-            pass
-        time_simu = time() - time_queue
+    start_time = time()
 
-        if verbose:
-            print(result)
+    job = service.run(
+        program_id="sampler",
+        options=options,
+        inputs=program_inputs,
+    )
 
-        telemetry_info = [result.job_id, time_queue, time_simu]
-        return result, telemetry_info
+    while str(job.status()) == "JobStatus.QUEUED":
+        pass
+    time_queue = time() - start_time
+    while str(job.status()) == "JobStatus.RUNNING":
+        pass
+    time_simu = time() - time_queue
+
+    result = job.result()
+    if verbose:
+        print(result)
+
+    telemetry_info = [job.job_id, time_queue, time_simu]
+    return result, telemetry_info

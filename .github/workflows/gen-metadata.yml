@@ -51,7 +51,7 @@ jobs:
       env:
         QS_TOKEN: ${{ secrets.QUANTUM_SERVICES_TOKEN }}
       run: |
-        python worflow.py authentication --auth="legacy" --token="${QS_TOKEN}" --instance="ibm-q/open/main"
+        python workflow.py authentication --channel="ibm_quantum" --token="${QS_TOKEN}" --instance="ibm-q/open/main"
     - name: Generate metadata
       env:
         CIRCUIT_ID: ${{ github.event.inputs.circuit_id }}
@@ -61,7 +61,7 @@ jobs:
         LAYER: ${{ github.event.inputs.layer }}
         BACKEND: ${{ github.event.inputs.backend }}
       run: |
-        python worflow.py kernel_flow --circuit_tpl_id=[${CIRCUIT_ID}] --width=${NB_QUBITS} --layer=${LAYER} --matrix_size=[${MATRIX_SIZE},${MATRIX_SIZE}] --backend="${BACKEND}" --shots=${SHOTS}
+        python workflow.py kernel_flow --circuit_tpl_id=[${CIRCUIT_ID}] --width=${NB_QUBITS} --layer=${LAYER} --matrix_size=[${MATRIX_SIZE},${MATRIX_SIZE}] --backend="${BACKEND}" --shots=${SHOTS}
         
     - name: Pull modif
       run: git pull
