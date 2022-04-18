@@ -132,8 +132,8 @@ def kernel_endpoint(
             runtime_result=run,
         )
 
-    except Exception as exception:  # pylint: disable=broad-except
-        if "413 Client Error" in exception:
+    except Exception as runtime_error:  # pylint: disable=broad-except
+        if "413 Client Error" in runtime_error:
             tele_comment = "Payload Too Large"
             print(
                 "::set-output name={name}::{value}".format(
@@ -143,7 +143,7 @@ def kernel_endpoint(
         else:
             print(
                 "::set-output name={name}::{value}".format(
-                    name="Unknown Error", value=exception
+                    name="Unknown Error", value=runtime_error
                 )
             )
 
