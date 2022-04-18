@@ -11,19 +11,21 @@ VERSION=0.0.0
 #ANARCH=ppc64le
 #TAGARCH=p
 
-ANARCH=s390x
-TAGARCH=z
+export ANARCH=s390x
+export TAGARCH=z
 
-ANOS=Linux
-ANYEAR=2021
-ANVERS=11
+export ANOS=Linux
+export ANYEAR=2021
+export ANVERS=11
 
-TAG=${VERSION}-${TAGARCH}
+export TAG=${VERSION}-${TAGARCH}
 
 ANACONDA_INSTALLER=Anaconda3-${ANYEAR}.${ANVERS}-${ANOS}-${ANARCH}.sh
 
+#git clone git@github.com:apache/arrow.git
+
 cp ../requirements*.txt . 
-sed -i 's/pyarrow//g' requirements.txt
+sed -i 's/pyarrow/arrow/g' requirements.txt
 
 podman build .  -t quay.io/qiskit/qmlbuild:${TAG} --build-arg=ANCONDA_INSTALLER=${ANACONDA_INSTALLER} --file=Dockerbuild
 podman push quay.io/qiskit/qmlbuild:${TAG}
