@@ -21,6 +21,8 @@ def kernel_telemetry(
     payload_size: int,
     width: int,
     layer: int,
+    nb_circuits: int,
+    comment: str,
 ) -> str:
     """Function generate telemetry metadata files.
 
@@ -32,6 +34,8 @@ def kernel_telemetry(
         payload_size: size of the payload send into the Runtime
         width: number of qubits
         layer: number of reps for the tpl
+        nb_circuits: number of circuits in the payload
+        comment: status of the Runtime, can be SUCCESS or error with why
 
     Returns:
         Telemetry file name
@@ -56,6 +60,10 @@ def kernel_telemetry(
         list_time_simu.append(time_simu)
         list_payload_size = old_file["payload_size"].tolist()
         list_payload_size.append(payload_size)
+        list_nb_circuits = old_file["nb_circuits"].tolist()
+        list_nb_circuits.append(nb_circuits)
+        list_comment = old_file["comment"].tolist()
+        list_comment.append(comment)
     else:
         list_width = [width]
         list_layers = [layer]
@@ -64,6 +72,8 @@ def kernel_telemetry(
         list_time_queue = [time_queue]
         list_time_simu = [time_simu]
         list_payload_size = [payload_size]
+        list_nb_circuits = [nb_circuits]
+        list_comment = [comment]
 
     fea_file = {
         "width": list_width,
@@ -73,6 +83,8 @@ def kernel_telemetry(
         "time_queue": list_time_queue,
         "time_simu": list_time_simu,
         "payload_size": list_payload_size,
+        "nb_circuits": list_nb_circuits,
+        "comment": list_comment,
     }
 
     data_fea = pd.DataFrame(fea_file)

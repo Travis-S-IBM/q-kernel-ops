@@ -72,5 +72,7 @@ class TestUtils(TestCase):
             payload_size=sys.getsizeof(kernel_cirq),
             width=4,
             layer=1,
+            nb_circuits=6,
+            comment="SUCCEED",
         )
         self.assertTrue(isinstance(fea_files, str))
