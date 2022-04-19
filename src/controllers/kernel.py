@@ -149,7 +149,7 @@ def kernel_endpoint(
             tele_comment = "Unknown Error"
 
         telemetry_info = ["None", 0, 0]
-        return_str = "Telemetry complete but Runtime failed ! " + tele_comment
+        return_str = "Telemetry complete but Runtime failed ! " + tele_comment + " \nException::" + str(runtime_error)
 
     kernel_telemetry(
         circuit_tpl_id=circuit_tpl_id,
