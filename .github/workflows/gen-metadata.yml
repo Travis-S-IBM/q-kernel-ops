@@ -62,6 +62,7 @@ jobs:
         LAYER: ${{ github.event.inputs.layer }}
         BACKEND: ${{ github.event.inputs.backend }}
       run: |
+        echo "::notice file=resources/kernel_metadata/telemetry_info.csv::Circuit ${CIRCUIT_ID} ; Matrix size ${MATRIX_SIZE}"
         python workflow.py kernel_flow --circuit_tpl_id=[${CIRCUIT_ID}] --width=${NB_QUBITS} --layer=${LAYER} --matrix_size=[${MATRIX_SIZE},${MATRIX_SIZE}] --backend="${BACKEND}" --shots=${SHOTS}
         
     - name: Pull modif
