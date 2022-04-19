@@ -107,14 +107,49 @@ def kernel_endpoint(
         circuits_tpl=circuits_tpl, seed_x=seed_x, seed_y=seed_y, verbose=verbose
     )
 
-    run, telemetry_info = run_sampler(
-        circuits=kernel_cirq, backend=backend, shots=shots, verbose=verbose
-    )
+    tele_comment = "SUCCESS"
 
-    if verbose:
-        print(
-            "::set-output name={name}::{value}".format(name="KernelResult", value=run)
+    try:
+        run, telemetry_info = run_sampler(
+            circuits=kernel_cirq, backend=backend, shots=shots, verbose=verbose
         )
+
+        if verbose:
+            print(
+                "::set-output name={name}::{value}".format(
+                    name="KernelResult", value=run
+                )
+            )
+
+        return_str = kernel_metadata(
+            circuit_tpl_id=circuit_tpl_id,
+            width=width,
+            layer=layer,
+            shots=shots,
+            seed1=seed_x,
+            seed2=seed_y,
+            backend=backend,
+            runtime_result=run,
+        )
+
+    except Exception as runtime_error:  # pylint: disable=broad-except
+        if "413 Client Error" in str(runtime_error):
+            tele_comment = "Payload Too Large"
+            print(
+                "::set-output name={name}::{value}".format(
+                    name="Error", value=tele_comment
+                )
+            )
+        else:
+            print(
+                "::set-output name={name}::{value}".format(
+                    name="Unknown Error", value=str(runtime_error)
+                )
+            )
+            tele_comment = "Unknown Error"
+
+        telemetry_info = ["None", 0, 0]
+        return_str = "Telemetry complete but Runtime failed ! " + tele_comment
 
     kernel_telemetry(
         circuit_tpl_id=circuit_tpl_id,
@@ -124,15 +159,8 @@ def kernel_endpoint(
         payload_size=sys.getsizeof(kernel_cirq),
         width=width,
         layer=layer,
+        nb_circuits=len(kernel_cirq),
+        comment=tele_comment,
     )
 
-    return kernel_metadata(
-        circuit_tpl_id=circuit_tpl_id,
-        width=width,
-        layer=layer,
-        shots=shots,
-        seed1=seed_x,
-        seed2=seed_y,
-        backend=backend,
-        runtime_result=run,
-    )
+    return return_str
