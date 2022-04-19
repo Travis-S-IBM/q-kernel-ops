@@ -33,6 +33,7 @@ jobs:
     name: Gen metadata
     concurrency: ci-metadata
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
     - uses: actions/checkout@v2
       with:
