@@ -68,7 +68,10 @@ jobs:
 
         echo "::notice file=resources/kernel_metadata/telemetry_info.csv::${INPUTS_ACTIONS}"
         python workflow.py kernel_flow --circuit_tpl_id=[${CIRCUIT_ID}] --width=${NB_QUBITS} --layer=${LAYER} --matrix_size=[${MATRIX_SIZE},${MATRIX_SIZE}] --backend="${BACKEND}" --shots=${SHOTS}
-        
+
+    - name: Show telemetry
+        run: python workflow.py view_telemetry
+
     - name: Pull modif
       run: git pull
     - uses: stefanzweifel/git-auto-commit-action@v4
