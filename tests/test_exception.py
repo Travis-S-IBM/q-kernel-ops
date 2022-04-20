@@ -19,8 +19,8 @@ class TestUtils(TestCase):
         self.assertEqual(tele_comment, "Payload Too Large")
 
         error_rantoolong = """
-            '("Connection broken: InvalidChunkLength(got length b\'\', 0 bytes read)",
-            InvalidChunkLength(got length b\'\', 0 bytes read))'
+            Unable to receive job result. Job efgege56856giefe ran longer than maximum execution time.
+            Job was cancelled:\n2022-
         """
         tele_comment = known_exception(str(error_rantoolong))
         self.assertEqual(tele_comment, "Runtime: Cancelled - Ran too long")

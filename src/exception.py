@@ -15,7 +15,7 @@ def known_exception(runtime_error: str) -> str:
         print(
             "::set-output name={name}::{value}".format(name="Error", value=tele_comment)
         )
-    elif "Connection broken" in runtime_error and "0 bytes read" in runtime_error:
+    elif "ran longer than maximum execution time." in runtime_error:
         tele_comment = "Runtime: Cancelled - Ran too long"
         print(
             "::set-output name={name}::{value}".format(name="Error", value=tele_comment)
