@@ -123,7 +123,7 @@ def kernel_endpoint(
         comment=telemetry_info[3],
     )
 
-    if catch_exception == "None:":
+    if catch_exception == "None":
 
         return_str = kernel_metadata(
             circuit_tpl_id=circuit_tpl_id,
