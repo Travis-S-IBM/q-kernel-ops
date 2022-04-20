@@ -4,7 +4,7 @@ from time import time, sleep
 from typing import Tuple
 
 
-def get_sampler() -> Tuple[dict, list]:
+def get_sampler() -> Tuple[dict, list, str]:
     """Function to get a sample of SamplerResult object."""
     run = {
         "quasi_dists": [
@@ -59,5 +59,7 @@ def get_sampler() -> Tuple[dict, list]:
     time_queue = time() - start_time
     sleep(2)
     time_simu = time() - time_queue - start_time
-    telemetry_info = ["fzgezgrzgz", time_queue, time_simu]
-    return run, telemetry_info
+    tele_comment = "SUCCESS"
+    telemetry_info = ["fzgezgrzgz", time_queue, time_simu, tele_comment]
+    catch_exception = "None"
+    return run, telemetry_info, catch_exception

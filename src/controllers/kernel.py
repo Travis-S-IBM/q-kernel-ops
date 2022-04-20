@@ -107,19 +107,23 @@ def kernel_endpoint(
         circuits_tpl=circuits_tpl, seed_x=seed_x, seed_y=seed_y, verbose=verbose
     )
 
-    tele_comment = "SUCCESS"
+    run, telemetry_info, catch_exception = run_sampler(
+        circuits=kernel_cirq, backend=backend, shots=shots, verbose=verbose
+    )
 
-    try:
-        run, telemetry_info = run_sampler(
-            circuits=kernel_cirq, backend=backend, shots=shots, verbose=verbose
-        )
+    kernel_telemetry(
+        circuit_tpl_id=circuit_tpl_id,
+        job_id=telemetry_info[0],
+        time_queue=float(telemetry_info[1]),
+        time_simu=float(telemetry_info[2]),
+        payload_size=sys.getsizeof(kernel_cirq),
+        width=width,
+        layer=layer,
+        nb_circuits=len(kernel_cirq),
+        comment=telemetry_info[3],
+    )
 
-        if verbose:
-            print(
-                "::set-output name={name}::{value}".format(
-                    name="KernelResult", value=run
-                )
-            )
+    if catch_exception == "None":
 
         return_str = kernel_metadata(
             circuit_tpl_id=circuit_tpl_id,
@@ -132,35 +136,12 @@ def kernel_endpoint(
             runtime_result=run,
         )
 
-    except Exception as runtime_error:  # pylint: disable=broad-except
-        if "413 Client Error" in str(runtime_error):
-            tele_comment = "Payload Too Large"
-            print(
-                "::set-output name={name}::{value}".format(
-                    name="Error", value=tele_comment
-                )
-            )
-        else:
-            print(
-                "::set-output name={name}::{value}".format(
-                    name="Unknown Error", value=str(runtime_error)
-                )
-            )
-            tele_comment = "Unknown Error"
-
-        telemetry_info = ["None", 0, 0]
-        return_str = "Telemetry complete but Runtime failed ! " + tele_comment
-
-    kernel_telemetry(
-        circuit_tpl_id=circuit_tpl_id,
-        job_id=telemetry_info[0],
-        time_queue=float(telemetry_info[1]),
-        time_simu=float(telemetry_info[2]),
-        payload_size=sys.getsizeof(kernel_cirq),
-        width=width,
-        layer=layer,
-        nb_circuits=len(kernel_cirq),
-        comment=tele_comment,
-    )
+    else:
+        return_str = (
+            "Telemetry complete but Runtime failed ! "
+            + telemetry_info[3]
+            + " \nException::"
+            + catch_exception
+        )
 
     return return_str
