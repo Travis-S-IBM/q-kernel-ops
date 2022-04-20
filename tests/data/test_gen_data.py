@@ -12,7 +12,7 @@ class TestUtils(TestCase):
 
     def test_kernel_metadata(self):
         """Test to test the kernel metadata function."""
-        re_sampler, _, _ = return_sampler.get_sampler()
+        re_sampler, _ = return_sampler.get_sampler()
         circuits_2 = list(range(901, 901 + int(len(re_sampler["quasi_dists"]) / 2)))
         seed_x_2 = [
             42 for _ in range(int(len(re_sampler["quasi_dists"]) / len(circuits_2)))
@@ -60,7 +60,7 @@ class TestUtils(TestCase):
             circuits_tpl=circuits_tpl, seed_x=[0, 1, 1], seed_y=[0, 0, 1]
         )
 
-        _, te_sampler, _ = return_sampler.get_sampler()
+        _, te_sampler = return_sampler.get_sampler()
 
         print("Tele : ", te_sampler)
 
@@ -73,6 +73,6 @@ class TestUtils(TestCase):
             width=4,
             layer=1,
             nb_circuits=6,
-            comment=te_sampler[3],
+            comment="SUCCEED",
         )
         self.assertTrue(isinstance(fea_files, str))

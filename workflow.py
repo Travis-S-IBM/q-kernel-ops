@@ -2,7 +2,7 @@
 Available commands:
 1. Register the session in disk space
 ```shell
-python workflow.py authentication --channel="cloud" --token="your_very_long_token" --instance="ibm-q/open/main"
+python workflow.py authentication --auth="cloud" --token="your_very_long_token" --instance="ibm-q/open/main"
 ```
 2. Run only the kernel flow with seed1 and seed2.
 ```shell
@@ -16,10 +16,6 @@ python workflow.py kernel_flow --circuit_tpl_id=[5] --matrix_size=[1,1]
 4. To decode and access the data from metadata kernel files
 ```
 python workflow.py view_kernel --file_name="kernels-2-ideal.csv"
-```
-5. To decode and access the data from the telemetry file
-```
-python workflow.py view_telemetry
 ```
 """
 import fire
