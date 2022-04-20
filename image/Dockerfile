@@ -6,8 +6,8 @@ COPY worflow.py ./worflow.py
 # set up environment
 
 ARG CIRCUIT_ID=2
-ARG SHOTS=512
-ARG MATRIX_SIZE=7
+ARG SHOTS=32
+ARG MATRIX_SIZE=5
 ARG NB_QUBITS=4
 ARG LAYER=1
 ARG BACKEND=ibm_qasm_simulator

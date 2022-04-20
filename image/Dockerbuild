@@ -6,28 +6,55 @@
 FROM registry.access.redhat.com/ubi8/ubi:latest
 ARG ANACONDA_INSTALLER=Anaconda3-2021.11-Linux-s390x.sh
 
-RUN  dnf install -y wget gcc gcc-c++ make cmake blas64 lapack64 openssl-devel suitesparse && \
+RUN  dnf update -y && \
+     dnf install -y wget gcc gcc-c++ make cmake blas64 lapack64 \
+         openssl-devel suitesparse git autoconf flex bison && \
      dnf install -y --enablerepo=codeready-builder-for-rhel-8-s390x-rpms \
-         blas-devel lapack-devel suitesparse-devel
+         blas-devel lapack-devel suitesparse-devel gflags-devel boost-devel && \
+     dnf install -y --enablerepo=rhel-8-for-s390x-appstream-rpms python39-devel
 
 RUN wget https://repo.anaconda.com/archive/$ANACONDA_INSTALLER
 
-RUN bash ./$ANACONDA_INSTALLER -b && \
+RUN bash ./$ANACONDA_INSTALLER -b &&       \
     source /root/anaconda3/bin/activate && \
     /root/anaconda3/bin/conda init
 
-RUN source /root/.bashrc       && \
-    pip install qiskit-terra   && \
-    pip install qiskit-aer     && \
-    pip install qiskit-ignis   && \
+RUN source /root/.bashrc       &&          \
+    pip install qiskit-terra   &&          \
+    pip install qiskit-aer     &&          \
+    pip install qiskit-ignis   &&          \
     pip install qiskit-machine-learning && \
-    pip install qiskit-ibmq-provider && \
+    pip install qiskit-ibmq-provider &&    \
     pip install chompack 
+
 
 COPY requirements-dev.txt .
 COPY requirements.txt .
 
-RUN source /root/.bashrc       && \
+RUN source /root/.bashrc       &&          \
     pip install -r requirements-dev.txt && \
     pip install -r requirements.txt
 
+RUN git clone https://github.com/apache/arrow.git && cd arrow && \
+    git submodule init && git submodule update && cd python &&   \
+    source /root/.bashrc && pip install -r requirements-build.txt && \ 
+    cd .. && mkdir cpp/build && cd cpp/build &&   \
+    export ARROW_HOME=/usr && cmake ..               \
+                  -DCMAKE_INSTALL_PREFIX=$ARROW_HOME \
+                  -DCMAKE_INSTALL_LIBDIR=lib         \
+                  -DCMAKE_BUILD_TYPE=release         \
+                  -DARROW_WITH_BZ2=ON                \
+                  -DARROW_WITH_ZLIB=ON               \
+                  -DARROW_WITH_ZSTD=ON               \
+                  -DARROW_WITH_LZ4=ON                \
+                  -DARROW_WITH_SNAPPY=ON             \
+                  -DARROW_WITH_BROTLI=ON             \
+                  -DARROW_PYTHON=ON                  \
+                  -DBoost_INCLUDE_DIR=/usr/include   \
+                  -DARROW_PARQUET=ON                 \
+                  -DThrift_SOURCE=BUNDLED            \
+                  -DGTest_SOURCE=BUNDLED             \
+                  -DRapidJSON_SOURCE=BUNDLED         \
+                  -Dre2_SOURCE=BUNDLED               \
+                  -Dutf8proc_SOURCE=BUNDLED &&       \
+   make install && cd ../../python && python setup.py build_ext --inplace
