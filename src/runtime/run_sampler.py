@@ -72,7 +72,8 @@ def run_sampler(
             result = job.result()
         except Exception as simu_error:  # pylint: disable=broad-except
             tele_comment = known_exception(str(simu_error))
-            telemetry_info = [job.job_id, time_queue, 0, tele_comment]
+            time_simu = time() - time_queue - start_time
+            telemetry_info = [job.job_id, time_queue, time_simu, tele_comment]
             catch_exception = str(simu_error)
             result = {"quasi_dists": [], "metadata": []}
             return result, telemetry_info, catch_exception
