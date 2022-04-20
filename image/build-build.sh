@@ -31,6 +31,6 @@ podman push quay.io/qiskit/qmlbuild:${TAG}
 rm requirements*.txt
 
 cp -r ../src .
-cp ../worflow.py .
+cp ../workflow.py .
 
 podman build .  -t quay.io/qiskit/qmlrun:${TAG} 
