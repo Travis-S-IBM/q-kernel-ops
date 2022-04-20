@@ -62,9 +62,9 @@ jobs:
         LAYER: ${{ github.event.inputs.layer }}
         BACKEND: ${{ github.event.inputs.backend }}
       run: |
-        cat > $INPUTS_ACTIONS <<- EOF
+        INPUTS_ACTIONS=$(cat <<EOF
         Circuit ${CIRCUIT_ID} ; Matrix size ${MATRIX_SIZE} ; Nb qubits ${NB_QUBITS} ; Layer ${LAYER} ; Backend ${BACKEND} ; Shots ${SHOTS}
-        EOF
+        EOF)
 
         echo "::notice file=resources/kernel_metadata/telemetry_info.csv::${INPUTS_ACTIONS}"
         python workflow.py kernel_flow --circuit_tpl_id=[${CIRCUIT_ID}] --width=${NB_QUBITS} --layer=${LAYER} --matrix_size=[${MATRIX_SIZE},${MATRIX_SIZE}] --backend="${BACKEND}" --shots=${SHOTS}
