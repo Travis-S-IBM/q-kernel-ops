@@ -137,11 +137,14 @@ def kernel_endpoint(
         )
 
     else:
-        return_str = (
-            "Telemetry complete but Runtime failed ! "
-            + telemetry_info[3]
-            + " \nException::"
-            + catch_exception
-        )
+        if telemetry_info[3] == "Unknown Error":
+            return_str = (
+                "Telemetry complete but Runtime failed ! "
+                + telemetry_info[3]
+                + " \nException::"
+                + catch_exception
+            )
+        else:
+            return_str = "Telemetry complete but Runtime failed ! " + telemetry_info[3]
 
     return return_str

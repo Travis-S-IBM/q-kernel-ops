@@ -3,7 +3,9 @@ name: Qiskit tests
 on:
   push:
     branches:
-    - master
+      - master
+  workflow_dispatch:
+  pull_request:
 
 jobs:
   stable:
