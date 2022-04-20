@@ -13,12 +13,12 @@ from time import time
 
 from qiskit_ibm_runtime import QiskitRuntimeService
 from qiskit import QuantumCircuit
-from exception import known_exception
+from src.exception import known_exception
 
 
 def run_sampler(
     circuits: [QuantumCircuit], backend="ibmq_qasm_simulator", shots=1024, verbose=False
-) -> Tuple[dict, list]:
+) -> Tuple[dict, list, str]:
     """Function to run the final circuit on quantum computer.
 
     Args:

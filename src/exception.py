@@ -1,5 +1,6 @@
 """Exception class for controlling all exceptions."""
 
+
 def known_exception(runtime_error: str) -> str:
     """Function to check exceptions.
 
@@ -31,5 +32,5 @@ def known_exception(runtime_error: str) -> str:
                 name="Unknown Error", value=runtime_error
             )
         )
-    
+
     return tele_comment
