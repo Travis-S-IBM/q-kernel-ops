@@ -13,16 +13,12 @@ def known_exception(runtime_error: str) -> str:
     if "413 Client Error" in runtime_error:
         tele_comment = "Payload Too Large"
         print(
-            "::set-output name={name}::{value}".format(
-                name="Error", value=tele_comment
-            )
+            "::set-output name={name}::{value}".format(name="Error", value=tele_comment)
         )
     elif "Connection broken" in runtime_error and "0 bytes read" in runtime_error:
         tele_comment = "Runtime: Cancelled - Ran too long"
         print(
-            "::set-output name={name}::{value}".format(
-                name="Error", value=tele_comment
-            )
+            "::set-output name={name}::{value}".format(name="Error", value=tele_comment)
         )
 
     else:
