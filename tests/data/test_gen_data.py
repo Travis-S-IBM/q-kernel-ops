@@ -98,7 +98,7 @@ class TestUtils(TestCase):
         )
         self.assertTrue(isinstance(fea_files, str))
 
-        _, te_sampler, _ = return_sampler.return_circuit_runner()
+        _, te_sampler, _ = return_circuit_runner.get_circuit_runner()
 
         print("Tele : ", te_sampler)
 
