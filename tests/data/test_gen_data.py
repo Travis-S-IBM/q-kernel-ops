@@ -12,7 +12,7 @@ class TestUtils(TestCase):
 
     def test_kernel_metadata(self):
         """Test to test the kernel metadata function."""
-        re_sampler, _, _ = return_sampler.get_sampler()
+        re_sampler, telemetry_info, _, _ = return_sampler.get_sampler()
         circuits_2 = list(range(901, 901 + int(len(re_sampler["quasi_dists"]) / 2)))
         seed_x_2 = [
             42 for _ in range(int(len(re_sampler["quasi_dists"]) / len(circuits_2)))
@@ -23,9 +23,8 @@ class TestUtils(TestCase):
 
         fea_files_2 = kernel_metadata(
             circuit_tpl_id=circuits_2,
+            job_id=telemetry_info[0],
             width=4,
-            layer=3,
-            shots=1024,
             seed1=seed_x_2,
             seed2=seed_y_2,
             backend="ibmq_qasm_simulator",
@@ -43,9 +42,8 @@ class TestUtils(TestCase):
 
         fea_files_3 = kernel_metadata(
             circuit_tpl_id=circuits_3,
+            job_id=telemetry_info[0],
             width=4,
-            layer=3,
-            shots=1024,
             seed1=seed_x_3,
             seed2=seed_y_3,
             backend="ibmq_qasm_simulator",
@@ -53,7 +51,12 @@ class TestUtils(TestCase):
         )
         self.assertTrue(isinstance(fea_files_3, List))
 
-        re_statevector, _, _ = return_circuit_runner.get_circuit_runner()
+        (
+            re_statevector,
+            telemetry_info,
+            _,
+            _,
+        ) = return_circuit_runner.get_circuit_runner()
         circuits_2 = list(range(901, 901 + int(len(re_statevector["results"]) / 2)))
         seed_x_2 = [
             42 for _ in range(int(len(re_statevector["results"]) / len(circuits_2)))
@@ -64,12 +67,11 @@ class TestUtils(TestCase):
 
         fea_files_2 = kernel_metadata(
             circuit_tpl_id=circuits_2,
+            job_id=telemetry_info[0],
             width=4,
-            layer=3,
-            shots=1024,
             seed1=seed_x_2,
             seed2=seed_y_2,
-            backend="ibmq_qasm_simulator",
+            backend="simulator-statevector",
             runtime_result=re_sampler,
         )
         self.assertTrue(isinstance(fea_files_2, List))
@@ -81,9 +83,7 @@ class TestUtils(TestCase):
             circuits_tpl=circuits_tpl, seed_x=[0, 1, 1], seed_y=[0, 0, 1]
         )
 
-        _, te_sampler, _ = return_sampler.get_sampler()
-
-        print("Tele : ", te_sampler)
+        _, te_sampler, _, program_id = return_sampler.get_sampler()
 
         fea_files = kernel_telemetry(
             circuit_tpl_id=[2],
@@ -93,14 +93,14 @@ class TestUtils(TestCase):
             payload_size=sys.getsizeof(kernel_cirq),
             width=4,
             layer=1,
+            shots=1024,
+            program_id=program_id,
             nb_circuits=6,
             comment=te_sampler[3],
         )
         self.assertTrue(isinstance(fea_files, str))
 
-        _, te_sampler, _ = return_circuit_runner.get_circuit_runner()
-
-        print("Tele : ", te_sampler)
+        _, te_sampler, _, program_id = return_circuit_runner.get_circuit_runner()
 
         fea_files = kernel_telemetry(
             circuit_tpl_id=[2],
@@ -110,6 +110,8 @@ class TestUtils(TestCase):
             payload_size=sys.getsizeof(kernel_cirq),
             width=4,
             layer=1,
+            shots=1024,
+            program_id=program_id,
             nb_circuits=6,
             comment=te_sampler[3],
         )
