@@ -1,10 +1,10 @@
 """
 #############################################
 #
-# run_sampler.py
+# run_runtime.py
 #
-# Runtime launcher for sampler program.
-# doc : https://cloud.ibm.com/docs/quantum-computing?topic=quantum-computing-example-sampler
+# Runtime launcher for program.
+#
 #
 #############################################
 """
@@ -16,7 +16,7 @@ from qiskit import QuantumCircuit
 from src.exception import known_exception
 
 
-def run_sampler(
+def run_runtime(
     circuits: [QuantumCircuit], backend="ibmq_qasm_simulator", shots=1024, verbose=False
 ) -> Tuple[dict, list, str]:
     """Function to run the final circuit on quantum computer.
@@ -30,9 +30,12 @@ def run_sampler(
     Return:
         Result from the running + telemetry info
     """
-    if backend != "simulator_statevector":
+    if backend == "simulator_statevector":
+        program_id = "circuit-runner"
+    else:
         for cirq in circuits:
             cirq.measure_all()
+        program_id = "sampler"
 
     service = QiskitRuntimeService()
     program_inputs = {
@@ -50,7 +53,7 @@ def run_sampler(
         # Launch exceptions
         try:
             job = service.run(
-                program_id="sampler",
+                program_id=program_id,
                 options=options,
                 inputs=program_inputs,
             )
@@ -58,7 +61,10 @@ def run_sampler(
             tele_comment = known_exception(str(launch_error))
             telemetry_info = ["None", 0, 0, tele_comment]
             catch_exception = str(launch_error)
-            result = {"quasi_dists": [], "metadata": []}
+            if program_id == "circuit-runner":
+                result = {"results": [], "metadata": []}
+            if program_id == "sampler":
+                result = {"quasi_dists": [], "metadata": {}}
             return result, telemetry_info, catch_exception
 
         while str(job.status()) == "JobStatus.QUEUED":
@@ -75,7 +81,10 @@ def run_sampler(
             time_simu = time() - time_queue - start_time
             telemetry_info = [job.job_id, time_queue, time_simu, tele_comment]
             catch_exception = str(simu_error)
-            result = {"quasi_dists": [], "metadata": []}
+            if program_id == "circuit-runner":
+                result = {"results": [], "metadata": []}
+            if program_id == "sampler":
+                result = {"quasi_dists": [], "metadata": []}
             return result, telemetry_info, catch_exception
 
         time_simu = time() - time_queue - start_time
@@ -84,7 +93,10 @@ def run_sampler(
         tele_comment = known_exception(str(runtime_error))
         telemetry_info = ["None", 0, 0, tele_comment]
         catch_exception = str(runtime_error)
-        result = {"quasi_dists": [], "metadata": []}
+        if program_id == "circuit-runner":
+            result = {"results": [], "metadata": []}
+        elif program_id == "sampler":
+            result = {"quasi_dists": [], "metadata": []}
         return result, telemetry_info, catch_exception
 
     if verbose:

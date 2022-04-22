@@ -46,19 +46,31 @@ def kernel_metadata(
 
     for circ_index, circuit in enumerate(circuit_tpl_id):
         fidelity = []
-        min_lim = int(
-            circ_index * len(runtime_result["quasi_dists"]) / len(circuit_tpl_id)
-        )
-        max_lim = int(
-            len(runtime_result["quasi_dists"]) / len(circuit_tpl_id) + min_lim
-        )
-        for i in range(min_lim, max_lim):
-            if runtime_result["quasi_dists"][i].get(wanted_result) is not None:
-                fidelity.append(runtime_result["quasi_dists"][i][wanted_result])
-            elif runtime_result["quasi_dists"][i].get("0") is not None:
-                fidelity.append(runtime_result["quasi_dists"][i]["0"])
-            else:
-                fidelity.append(0)
+
+        if backend == "simulator_statevector":
+            min_lim = int(
+                circ_index * len(runtime_result["results"]) / len(circuit_tpl_id)
+            )
+            max_lim = int(
+                len(runtime_result["results"]) / len(circuit_tpl_id) + min_lim
+            )
+            for i in range(min_lim, max_lim):
+                fidelity.append(runtime_result["results"][i]["header"]["global_phase"])
+
+        else:
+            min_lim = int(
+                circ_index * len(runtime_result["quasi_dists"]) / len(circuit_tpl_id)
+            )
+            max_lim = int(
+                len(runtime_result["quasi_dists"]) / len(circuit_tpl_id) + min_lim
+            )
+            for i in range(min_lim, max_lim):
+                if runtime_result["quasi_dists"][i].get(wanted_result) is not None:
+                    fidelity.append(runtime_result["quasi_dists"][i][wanted_result])
+                elif runtime_result["quasi_dists"][i].get("0") is not None:
+                    fidelity.append(runtime_result["quasi_dists"][i]["0"])
+                else:
+                    fidelity.append(0)
 
         fea_file = {
             "width": width,
