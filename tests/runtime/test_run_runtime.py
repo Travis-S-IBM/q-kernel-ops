@@ -12,25 +12,31 @@ class TestUtils(TestCase):
         """Test for run sampler function."""
         authentication()
         kernel_cirq = [kernel_circuit(circuit_2(), 42, 4242)]
-        run, telemetry_info, catch_exception = run_runtime(circuits=kernel_cirq)
+        run, telemetry_info, catch_exception, program_id = run_runtime(
+            circuits=kernel_cirq
+        )
         self.assertTrue(isinstance(run, dict))
         self.assertEqual(len(kernel_cirq), len(run["quasi_dists"]))
         self.assertTrue(list(telemetry_info))
         self.assertEqual(len(telemetry_info), 4)
         self.assertEqual(catch_exception, "None")
+        self.assertEqual(program_id, "sampler")
 
         kernel_cirq = [
             kernel_circuit(circuit_2(), 42, 4242),
             kernel_circuit(circuit_5(), 24, 2424),
         ]
-        run, telemetry_info, catch_exception = run_runtime(circuits=kernel_cirq)
+        run, telemetry_info, catch_exception, program_id = run_runtime(
+            circuits=kernel_cirq
+        )
         self.assertTrue(isinstance(run, dict))
         self.assertEqual(len(kernel_cirq), len(run["quasi_dists"]))
         self.assertTrue(list(telemetry_info))
         self.assertEqual(len(telemetry_info), 4)
         self.assertEqual(catch_exception, "None")
+        self.assertEqual(program_id, "sampler")
 
-        run, telemetry_info, catch_exception = run_runtime(
+        run, telemetry_info, catch_exception, program_id = run_runtime(
             circuits=kernel_cirq, backend="simulator_statevector"
         )
         self.assertTrue(isinstance(run, dict))
@@ -38,3 +44,4 @@ class TestUtils(TestCase):
         self.assertTrue(list(telemetry_info))
         self.assertEqual(len(telemetry_info), 4)
         self.assertEqual(catch_exception, "None")
+        self.assertEqual(program_id, "circuit-runner")

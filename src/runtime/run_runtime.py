@@ -18,7 +18,7 @@ from src.exception import known_exception
 
 def run_runtime(
     circuits: [QuantumCircuit], backend="ibmq_qasm_simulator", shots=1024, verbose=False
-) -> Tuple[dict, list, str]:
+) -> Tuple[dict, list, str, str]:
     """Function to run the final circuit on quantum computer.
 
     Args:
@@ -65,7 +65,7 @@ def run_runtime(
                 result = {"results": [], "metadata": []}
             if program_id == "sampler":
                 result = {"quasi_dists": [], "metadata": {}}
-            return result, telemetry_info, catch_exception
+            return result, telemetry_info, catch_exception, program_id
 
         while str(job.status()) == "JobStatus.QUEUED":
             pass
@@ -85,7 +85,7 @@ def run_runtime(
                 result = {"results": [], "metadata": []}
             if program_id == "sampler":
                 result = {"quasi_dists": [], "metadata": []}
-            return result, telemetry_info, catch_exception
+            return result, telemetry_info, catch_exception, program_id
 
         time_simu = time() - time_queue - start_time
 
@@ -97,7 +97,7 @@ def run_runtime(
             result = {"results": [], "metadata": []}
         elif program_id == "sampler":
             result = {"quasi_dists": [], "metadata": []}
-        return result, telemetry_info, catch_exception
+        return result, telemetry_info, catch_exception, program_id
 
     if verbose:
         print(result)
@@ -106,4 +106,4 @@ def run_runtime(
     catch_exception = "None"
 
     telemetry_info = [job.job_id, time_queue, time_simu, tele_comment]
-    return result, telemetry_info, catch_exception
+    return result, telemetry_info, catch_exception, program_id

@@ -4,7 +4,7 @@ from typing import Tuple
 from .st_return import get_standard
 
 
-def get_sampler() -> Tuple[dict, list, str]:
+def get_sampler() -> Tuple[dict, list, str, str]:
     """Function to get a sample of SamplerResult object."""
     run = {
         "quasi_dists": [
@@ -55,4 +55,5 @@ def get_sampler() -> Tuple[dict, list, str]:
         ],
     }
     telemetry_info, catch_exception = get_standard()
-    return run, telemetry_info, catch_exception
+    program_id = "sampler"
+    return run, telemetry_info, catch_exception, program_id
