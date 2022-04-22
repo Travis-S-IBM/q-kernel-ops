@@ -107,7 +107,7 @@ def kernel_endpoint(
         circuits_tpl=circuits_tpl, seed_x=seed_x, seed_y=seed_y, verbose=verbose
     )
 
-    run, telemetry_info, catch_exception = run_runtime(
+    run, telemetry_info, catch_exception, program_id = run_runtime(
         circuits=kernel_cirq, backend=backend, shots=shots, verbose=verbose
     )
 
@@ -119,6 +119,8 @@ def kernel_endpoint(
         payload_size=sys.getsizeof(kernel_cirq),
         width=width,
         layer=layer,
+        shots=shots,
+        program_id=program_id,
         nb_circuits=len(kernel_cirq),
         comment=telemetry_info[3],
     )
@@ -127,9 +129,8 @@ def kernel_endpoint(
 
         return_str = kernel_metadata(
             circuit_tpl_id=circuit_tpl_id,
+            job_id=telemetry_info[0],
             width=width,
-            layer=layer,
-            shots=shots,
             seed1=seed_x,
             seed2=seed_y,
             backend=backend,
