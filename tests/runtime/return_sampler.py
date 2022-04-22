@@ -1,7 +1,7 @@
 """Generate sampler return."""
 from ast import literal_eval
-from time import time, sleep
 from typing import Tuple
+from .st_return import get_standard
 
 
 def get_sampler() -> Tuple[dict, list, str]:
@@ -54,12 +54,5 @@ def get_sampler() -> Tuple[dict, list, str]:
             literal_eval("{'header_metadata': None, 'shots': 1024}"),
         ],
     }
-    start_time = time()
-    sleep(5)
-    time_queue = time() - start_time
-    sleep(2)
-    time_simu = time() - time_queue - start_time
-    tele_comment = "SUCCESS"
-    telemetry_info = ["fzgezgrzgz", time_queue, time_simu, tele_comment]
-    catch_exception = "None"
+    telemetry_info, catch_exception = get_standard()
     return run, telemetry_info, catch_exception

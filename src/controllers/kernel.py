@@ -13,7 +13,7 @@ import sys
 
 from src.circuits import circuit_2, circuit_5, circuit_10, circuit_18, kernel_circuit
 from src.data import kernel_metadata, kernel_telemetry
-from src.runtime import run_sampler
+from src.runtime import run_runtime
 
 
 def gen_circuits_tpl(
@@ -107,7 +107,7 @@ def kernel_endpoint(
         circuits_tpl=circuits_tpl, seed_x=seed_x, seed_y=seed_y, verbose=verbose
     )
 
-    run, telemetry_info, catch_exception = run_sampler(
+    run, telemetry_info, catch_exception = run_runtime(
         circuits=kernel_cirq, backend=backend, shots=shots, verbose=verbose
     )
 
