@@ -4,6 +4,7 @@ from typing import Tuple
 
 
 def get_time() -> Tuple[float, float]:
+    """Function to prepare test to get time."""
     start_time = time()
     sleep(5)
     time_queue = time() - start_time
@@ -14,10 +15,12 @@ def get_time() -> Tuple[float, float]:
 
 
 def get_exception() -> str:
+    """Function to prepare test to get exception."""
     return "None"
 
 
 def get_standard() -> Tuple[list, str]:
+    """Function to prepare test to get extra data."""
     time_queue, time_simu = get_time()
     tele_comment = "SUCCESS"
     telemetry_info = ["fzgezgrzgz", time_queue, time_simu, tele_comment]
