@@ -2,6 +2,8 @@
 
 import os
 import sys
+import shutil
+import subprocess
 from typing import List
 
 import pandas as pd
@@ -151,3 +153,68 @@ class Workflow:
         )
 
         return data_fea
+
+    @staticmethod
+    def sync_data(sha_folder: str = "../resources/shared_folder/") -> str:
+        """Commands for sync data to shared folder.
+
+        Args:
+            sha_folder: shared folder
+
+        Return:
+            Ok or error
+        """
+        local = "../resources/kernel_metadata/"
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+
+        # Check metadata file
+        for folder in os.listdir("{}/{}/".format(current_dir, local)):
+            if os.path.isdir("{}/{}/{}".format(current_dir, local, folder)):
+                for meta_file in os.listdir(
+                    "{}/{}/{}".format(current_dir, local, folder)
+                ):
+                    local_file = "{}/{}/{}/{}".format(
+                        current_dir, local, folder, meta_file
+                    )
+                    sha_file = "{}/{}/{}/{}".format(
+                        current_dir, sha_folder, folder, meta_file
+                    )
+                    if os.path.isfile(sha_file):
+                        if os.path.getsize(local_file) > sys.getsizeof(sha_file):
+                            shutil.copyfile(local_file, sha_file)
+                        else:
+                            shutil.copyfile(sha_file, local_file)
+                    elif os.path.isdir(sha_folder):
+                        shutil.copyfile(local_file, sha_file)
+                    else:
+                        os.mkdir(sha_folder)
+                        shutil.copyfile(local_file, sha_file)
+
+        # Check & merge telemetry
+        temp_tele_path = current_dir + local + "telemetry_info.csv"
+        local_tele_path = current_dir + local + "shared_telemetry_info.csv"
+        sha_tele_path = current_dir + sha_folder + "shared_telemetry_info.csv"
+        temp_tele = pd.read_feather(temp_tele_path)
+        sha_tele = pd.read_feather(sha_tele_path)
+
+        for index, jobid in enumerate(temp_tele["job_id"].tolist()):
+            if jobid in sha_tele["job_id"].tolist():
+                temp_tele = temp_tele.drop(labels=index, axis=0)
+                temp_tele.reset_index(drop=True, inplace=True)
+        if not temp_tele.empty:
+            final_tele = pd.concat([temp_tele, sha_tele], ignore_index=True)
+            final_tele.reset_index(drop=True, inplace=True)
+
+            final_tele.to_feather(sha_tele_path)
+            final_tele.to_feather(local_tele_path)
+        os.remove(temp_tele_path)
+
+        # Try to Git commit
+        try:
+            subprocess.check_call("git add resources/", shell=True)
+            subprocess.check_call('git commit -m "sync resources"', shell=True)
+            subprocess.check_call("git push", shell=True)
+        except Exception as git_error:  # pylint: disable=broad-except
+            return "Don't forget to update the resources file in GitHub"
+
+        return "sync data done & pushed to GitHub !"
