@@ -209,11 +209,11 @@ class Workflow:
             final_tele.to_feather(local_tele_path)
         os.remove(temp_tele_path)
 
-        # Try to Git commit
+        # Try to Git commit / push
         try:
             subprocess.check_call("git add resources/", shell=True)
             subprocess.check_call('git commit -m "sync resources"', shell=True)
-            subprocess.check_call("git push", shell=True)
+            subprocess.check_call("git push origin master", shell=True)
         except Exception as git_error:  # pylint: disable=broad-except
             return "Don't forget to update the resources file in GitHub"
 
