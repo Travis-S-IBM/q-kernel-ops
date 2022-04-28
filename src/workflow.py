@@ -3,13 +3,13 @@
 import os
 import sys
 import time
-import shutil
 import subprocess
 from typing import List
 
 import pandas as pd
 from qiskit_ibm_runtime import QiskitRuntimeService
 
+from src.controllers import sync_endpoint
 from src.controllers import kernel_endpoint
 
 
@@ -189,76 +189,18 @@ class Workflow:
         while os.path.isfile(lockfile):
             print("Wait 3 seconds, someone is doing a sync...")
             time.sleep(3)
-        subprocess.call("touch {}".format(lockfile))
 
-        try:
-            if kernel_metadata_sync:
-                # Check metadata file
-                for folder in os.listdir("{}/{}/".format(current_dir, local)):
-                    if os.path.isdir("{}/{}/{}".format(current_dir, local, folder)):
-                        for meta_file in os.listdir(
-                            "{}/{}/{}".format(current_dir, local, folder)
-                        ):
-                            local_file = "{}/{}/{}/{}".format(
-                                current_dir, local, folder, meta_file
-                            )
-                            sha_file = "{}/{}/{}/{}".format(
-                                current_dir, sha_folder, folder, meta_file
-                            )
-                            if os.path.isfile(sha_file):
-                                if os.path.getsize(local_file) > os.path.getsize(
-                                    sha_file
-                                ):
-                                    shutil.copyfile(local_file, sha_file)
-                                else:
-                                    shutil.copyfile(sha_file, local_file)
-                            elif os.path.isdir(
-                                "{}/{}/{}".format(current_dir, sha_folder, folder)
-                            ):
-                                shutil.copyfile(local_file, sha_file)
-                            else:
-                                os.mkdir(
-                                    "{}/{}/{}".format(current_dir, sha_folder, folder)
-                                )
-                                shutil.copyfile(local_file, sha_file)
+        open(lockfile, "a").close()
 
-            if telemetry_sync:
-                # Check & merge telemetry
-                temp_tele_path = "{}/{}/{}".format(
-                    current_dir, local, "telemetry_info.csv"
-                )
-                local_tele_path = "{}/{}/{}".format(
-                    current_dir, local, "shared_telemetry_info.csv"
-                )
-                sha_tele_path = "{}/{}/{}".format(
-                    current_dir, sha_folder, "shared_telemetry_info.csv"
-                )
-                temp_tele = pd.read_feather(temp_tele_path)
+        result_str = sync_endpoint(
+            current_dir=current_dir,
+            local=local,
+            sha_folder=sha_folder,
+            kernel_metadata_sync=kernel_metadata_sync,
+            telemetry_sync=telemetry_sync,
+        )
 
-                if not os.path.isfile(sha_tele_path) and os.path.isfile(
-                    local_tele_path
-                ):
-                    shutil.copyfile(local_tele_path, sha_tele_path)
-                elif not os.path.isfile(local_tele_path):
-                    shutil.copyfile(temp_tele_path, sha_tele_path)
-                    shutil.copyfile(sha_tele_path, local_tele_path)
-                else:
-                    sha_tele = pd.read_feather(sha_tele_path)
-                    for index, jobid in enumerate(temp_tele["job_id"].tolist()):
-                        if jobid in sha_tele["job_id"].tolist():
-                            temp_tele = temp_tele.drop(labels=index, axis=0)
-                            temp_tele.reset_index(drop=True, inplace=True)
-                    if not temp_tele.empty:
-                        final_tele = pd.concat([temp_tele, sha_tele], ignore_index=True)
-                        final_tele.reset_index(drop=True, inplace=True)
-
-                        final_tele.to_feather(sha_tele_path)
-                        final_tele.to_feather(local_tele_path)
-                os.remove(temp_tele_path)
-        except Exception as error_sync:  # pylint: disable=broad-except
-            os.remove(lockfile)
-            print("Error : ", error_sync)
-            return "An error occurred, lockfile unlock."
+        os.remove(lockfile)
 
         if git_sync:
             # Try to Git commit / push
@@ -270,4 +212,4 @@ class Workflow:
             except Exception as _:  # pylint: disable=broad-except
                 return "Don't forget to update the resources file in GitHub"
         else:
-            return "sync data done !"
+            return result_str

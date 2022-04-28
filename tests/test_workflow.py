@@ -46,7 +46,8 @@ class TestUtils(TestCase):
 
     def test_sync_data(self):
         """Test to test the sync data command."""
-        os.mkdir("../resources/shared_folder")
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        os.mkdir("{}/../resources/shared_folder".format(current_dir))
         sync_result = Workflow.sync_data(
             sha_folder="../resources/shared_folder", git_sync=False
         )
