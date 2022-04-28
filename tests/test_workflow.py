@@ -49,6 +49,6 @@ class TestUtils(TestCase):
         current_dir = os.path.dirname(os.path.abspath(__file__))
         os.mkdir("{}/../resources/shared_folder".format(current_dir))
         sync_result = Workflow.sync_data(
-            sha_folder="../resources/shared_folder", git_sync=False
+            sha_folder="resources/shared_folder", git_sync=False
         )
         self.assertEqual(sync_result, "sync data done !")

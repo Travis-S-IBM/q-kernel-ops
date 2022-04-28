@@ -190,7 +190,7 @@ class Workflow:
             print("Wait 3 seconds, someone is doing a sync...")
             time.sleep(3)
 
-        open(lockfile, "a").close()
+        open(lockfile, "a").close()  # pylint: disable=consider-using-with
 
         result_str = sync_endpoint(
             current_dir=current_dir,
