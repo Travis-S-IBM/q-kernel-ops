@@ -180,17 +180,20 @@ class Workflow:
         Return:
             Ok or error
         """
-        sha_folder = "../" + sha_folder + "/kernel_metadata"
         local = "../resources/kernel_metadata"
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        lockfile = "{}/{}/.busy".format(current_dir, sha_folder)
+        lockfile = "{}/../{}/.busy".format(current_dir, sha_folder)
+        sha_folder = "../" + sha_folder + "/kernel_metadata"
 
         # check lockfile
         while os.path.isfile(lockfile):
             print("Wait 3 seconds, someone is doing a sync...")
             time.sleep(3)
 
-        open(lockfile, "a").close()  # pylint: disable=consider-using-with
+        with open(lockfile, "w") as lockfile_content:
+            lockfile_content.write(
+                "Lockefile to avoid multiple sync at the same time..."
+            )
 
         result_str = sync_endpoint(
             current_dir=current_dir,
