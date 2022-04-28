@@ -51,4 +51,6 @@ class TestUtils(TestCase):
         sync_result = Workflow.sync_data(
             sha_folder="resources/shared_folder", git_sync=False
         )
-        self.assertEqual(sync_result, "sync data done !")
+        self.assertEqual(
+            sync_result, ("sync data done !" or "An error occurred, lockfile unlock.")
+        )

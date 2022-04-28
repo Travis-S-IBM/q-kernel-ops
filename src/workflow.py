@@ -192,7 +192,7 @@ class Workflow:
 
         with open(lockfile, "w") as lockfile_content:
             lockfile_content.write(
-                "Lockefile to avoid multiple sync at the same time..."
+                "Lockfile to avoid multiple sync at the same time..."
             )
 
         result_str = sync_endpoint(
