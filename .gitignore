@@ -1,6 +1,8 @@
-# Tests resources
+# Tests resources + shared resources
 resources/kernel_metadata/*/kernels-90*-ideal.csv
-resources/scripts/edit_pd.py
+resources/scripts/*
+resources/matrix/*
+resources/shared_folder/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
