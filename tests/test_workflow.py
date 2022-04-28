@@ -52,8 +52,8 @@ class TestUtils(TestCase):
             sha_folder="resources/shared_folder", git_sync=False
         )
         self.assertTrue(
-            True
-            if sync_result == "sync data done !"
-            or sync_result == "An error occurred, lockfile unlock."
-            else False
+            bool(
+                sync_result == "sync data done !"
+                or sync_result == "An error occurred, lockfile unlock."
+            )
         )

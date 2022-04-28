@@ -208,7 +208,7 @@ class Workflow:
         if git_sync:
             # Try to Git commit / push
             try:
-                subprocess.call("git add resources/", shell=True)
+                subprocess.call("git add resources/kernel_metadata/", shell=True)
                 subprocess.call('git commit -m "sync resources"', shell=True)
                 subprocess.call("git push", shell=True)
                 return "sync data done & pushed to GitHub !"
