@@ -164,8 +164,8 @@ class Workflow:
         Return:
             Ok or error
         """
-        sha_folder = "../" + sha_folder + "/kernel_metadata/"
-        local = "../resources/kernel_metadata/"
+        sha_folder = "../" + sha_folder + "/kernel_metadata"
+        local = "../resources/kernel_metadata"
         current_dir = os.path.dirname(os.path.abspath(__file__))
 
         # Check metadata file
@@ -185,22 +185,25 @@ class Workflow:
                             shutil.copyfile(local_file, sha_file)
                         else:
                             shutil.copyfile(sha_file, local_file)
-                    elif os.path.isdir(sha_folder):
+                    elif os.path.isdir("{}/{}/{}".format(current_dir, sha_folder, folder)):
                         shutil.copyfile(local_file, sha_file)
                     else:
-                        os.mkdir(sha_folder)
+                        os.mkdir("{}/{}/{}".format(current_dir, sha_folder, folder))
                         shutil.copyfile(local_file, sha_file)
 
         # Check & merge telemetry
-        temp_tele_path = current_dir + local + "telemetry_info.csv"
-        local_tele_path = current_dir + local + "shared_telemetry_info.csv"
-        sha_tele_path = current_dir + sha_folder + "shared_telemetry_info.csv"
+        temp_tele_path = "{}/{}/{}".format(current_dir, local, "telemetry_info.csv")
+        local_tele_path = "{}/{}/{}".format(current_dir, local, "shared_telemetry_info.csv")
+        sha_tele_path = "{}/{}/{}".format(current_dir, sha_folder, "shared_telemetry_info.csv")
         temp_tele = pd.read_feather(temp_tele_path)
-        sha_tele = pd.read_feather(sha_tele_path)
 
-        if not os.path.isfile(sha_tele_path):
+        if not os.path.isfile(sha_tele_path) and os.path.isfile(local_tele_path):
             shutil.copyfile(local_tele_path, sha_tele_path)
+        elif not os.path.isfile(local_tele_path):
+            shutil.copyfile(temp_tele_path, sha_tele_path)
+            shutil.copyfile(sha_tele_path, local_tele_path)
         else:
+            sha_tele = pd.read_feather(sha_tele_path)
             for index, jobid in enumerate(temp_tele["job_id"].tolist()):
                 if jobid in sha_tele["job_id"].tolist():
                     temp_tele = temp_tele.drop(labels=index, axis=0)
@@ -217,7 +220,7 @@ class Workflow:
         try:
             subprocess.check_call("git add resources/", shell=True)
             subprocess.check_call('git commit -m "sync resources"', shell=True)
-            subprocess.check_call("git push origin master", shell=True)
+            subprocess.check_call("git push", shell=True)
         except Exception as _:  # pylint: disable=broad-except
             return "Don't forget to update the resources file in GitHub"
 
