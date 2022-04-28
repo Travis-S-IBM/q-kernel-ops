@@ -53,7 +53,7 @@ class TestUtils(TestCase):
         )
         self.assertTrue(
             bool(
-                sync_result == "sync data done !"
-                or sync_result == "An error occurred, lockfile unlock."
+                sync_result
+                in ("sync data done !", "An error occurred, lockfile unlock.")
             )
         )
