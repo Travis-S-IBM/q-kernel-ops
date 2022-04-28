@@ -43,3 +43,11 @@ class TestUtils(TestCase):
         """Test to test the view telemetry command."""
         data_file = Workflow.view_telemetry()
         self.assertTrue(isinstance(data_file, pd.DataFrame))
+
+    def test_sync_data(self):
+        """Test to test the sync data command."""
+        os.mkdir("../resources/shared_folder")
+        sync_result = Workflow.sync_data(
+            sha_folder="../resources/shared_folder", git_sync=False
+        )
+        self.assertEqual(sync_result, "sync data done !")
