@@ -2,11 +2,14 @@
 
 import os
 import sys
+import time
+import subprocess
 from typing import List
 
 import pandas as pd
 from qiskit_ibm_runtime import QiskitRuntimeService
 
+from src.controllers import sync_endpoint
 from src.controllers import kernel_endpoint
 
 
@@ -105,18 +108,21 @@ class Workflow:
 
     @staticmethod
     def view_kernel(
-        file_name: str, backend: str = "ibmq_qasm_simulator"
+        file_name: str,
+        backend: str = "ibmq_qasm_simulator",
+        resources_path: str = "resources/kernel_metadata",
     ) -> pd.DataFrame:
         """Commands for decode kernel files.
 
         Args:
             file_name: name of the file to decode in resources/kernel_metadata
             backend: backend of the experiment of the resource file
+            resources_path: path of the resources files
 
         Return:
             Return file_name decode as pandas.Dataframe
         """
-        local = "../resources/kernel_metadata/" + backend
+        local = "../" + resources_path + "/" + backend
         current_dir = os.path.dirname(os.path.abspath(__file__))
 
         data_fea = pd.read_feather("{}/{}/".format(current_dir, local) + file_name)
@@ -130,16 +136,20 @@ class Workflow:
         return data_fea
 
     @staticmethod
-    def view_telemetry(file_name: str = "telemetry_info.csv") -> pd.DataFrame:
+    def view_telemetry(
+        file_name: str = "telemetry_info.csv",
+        resources_path: str = "resources/kernel_metadata",
+    ) -> pd.DataFrame:
         """Commands for decode telemetry files.
 
         Args:
             file_name: name of the file to decode in resources/kernel_metadata
+            resources_path: path of the resources files
 
         Return:
             Return file_name decode as pandas.Dataframe
         """
-        local = "../resources/kernel_metadata/"
+        local = "../" + resources_path
         current_dir = os.path.dirname(os.path.abspath(__file__))
 
         data_fea = pd.read_feather("{}/{}/".format(current_dir, local) + file_name)
@@ -151,3 +161,58 @@ class Workflow:
         )
 
         return data_fea
+
+    @staticmethod
+    def sync_data(
+        sha_folder: str = "resources/shared_folder",
+        kernel_metadata_sync: bool = True,
+        telemetry_sync: bool = True,
+        git_sync: bool = True,
+    ) -> str:
+        """Commands for sync data to shared folder.
+
+        Args:
+            sha_folder: shared folder
+            kernel_metadata_sync: sync the kernel metadata True / False
+            telemetry_sync: sync the telemetry file True / False
+            git_sync: push to git True / False
+
+        Return:
+            Ok or error
+        """
+        local = "../resources/kernel_metadata"
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        lockfile = "{}/../{}/.busy".format(current_dir, sha_folder)
+        sha_folder = "../" + sha_folder + "/kernel_metadata"
+
+        # check lockfile
+        while os.path.isfile(lockfile):
+            print("Wait 3 seconds, someone is doing a sync...")
+            time.sleep(3)
+
+        with open(lockfile, "w") as lockfile_content:
+            lockfile_content.write(
+                "Lockfile to avoid multiple sync at the same time..."
+            )
+
+        result_str = sync_endpoint(
+            current_dir=current_dir,
+            local=local,
+            sha_folder=sha_folder,
+            kernel_metadata_sync=kernel_metadata_sync,
+            telemetry_sync=telemetry_sync,
+        )
+
+        os.remove(lockfile)
+
+        if git_sync:
+            # Try to Git commit / push
+            try:
+                subprocess.call("git add resources/kernel_metadata/", shell=True)
+                subprocess.call('git commit -m "sync resources"', shell=True)
+                subprocess.call("git push", shell=True)
+                return "sync data done & pushed to GitHub !"
+            except Exception as _:  # pylint: disable=broad-except
+                return "Don't forget to update the resources file in GitHub"
+        else:
+            return result_str
