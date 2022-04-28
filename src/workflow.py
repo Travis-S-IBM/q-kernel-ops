@@ -155,7 +155,7 @@ class Workflow:
         return data_fea
 
     @staticmethod
-    def sync_data(sha_folder: str = "../resources/shared_folder/") -> str:
+    def sync_data(sha_folder: str = "resources/shared_folder") -> str:
         """Commands for sync data to shared folder.
 
         Args:
@@ -164,6 +164,7 @@ class Workflow:
         Return:
             Ok or error
         """
+        sha_folder = "../" + sha_folder + "/kernel_metadata/"
         local = "../resources/kernel_metadata/"
         current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -197,16 +198,19 @@ class Workflow:
         temp_tele = pd.read_feather(temp_tele_path)
         sha_tele = pd.read_feather(sha_tele_path)
 
-        for index, jobid in enumerate(temp_tele["job_id"].tolist()):
-            if jobid in sha_tele["job_id"].tolist():
-                temp_tele = temp_tele.drop(labels=index, axis=0)
-                temp_tele.reset_index(drop=True, inplace=True)
-        if not temp_tele.empty:
-            final_tele = pd.concat([temp_tele, sha_tele], ignore_index=True)
-            final_tele.reset_index(drop=True, inplace=True)
+        if not os.path.isfile(sha_tele_path):
+            shutil.copyfile(local_tele_path, sha_tele_path)
+        else:
+            for index, jobid in enumerate(temp_tele["job_id"].tolist()):
+                if jobid in sha_tele["job_id"].tolist():
+                    temp_tele = temp_tele.drop(labels=index, axis=0)
+                    temp_tele.reset_index(drop=True, inplace=True)
+            if not temp_tele.empty:
+                final_tele = pd.concat([temp_tele, sha_tele], ignore_index=True)
+                final_tele.reset_index(drop=True, inplace=True)
 
-            final_tele.to_feather(sha_tele_path)
-            final_tele.to_feather(local_tele_path)
+                final_tele.to_feather(sha_tele_path)
+                final_tele.to_feather(local_tele_path)
         os.remove(temp_tele_path)
 
         # Try to Git commit / push
