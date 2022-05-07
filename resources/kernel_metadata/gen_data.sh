@@ -5,13 +5,13 @@ nb_qubits=10
 cd ../../
 
 for i in $(seq 1 "$nb_layer"); do
-  echo "start layer $i"
 
-  if [[ ! $i -eq 3 ]] || [[ ! $i -eq 4 ]] || [[ ! $i -eq 6 ]]; then
+  if [[ $i -eq 3 ]] || [[ $i -eq 4 ]] || [[ $i -eq 6 ]]; then
     echo "no layer $i"
   else
+    echo "start layer $i"
     for u in $(seq 1 "$nb_qubits"); do
-      if [[ ! $u -eq 2 ]] || [[ ! $u -eq 3 ]] || [[ ! $u -eq 6 ]] || [[ ! $u -eq 7 ]] || [[ ! $u -eq 9 ]]; then
+      if [[ $u -eq 2 ]] || [[ $u -eq 3 ]] || [[ $u -eq 5 ]] || [[ $u -eq 6 ]] || [[ $u -eq 7 ]] || [[ $u -eq 9 ]]; then
         echo "no qubits $u"
       else
         echo "start qubit $u with layer $i"
