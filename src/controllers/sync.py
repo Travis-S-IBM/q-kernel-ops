@@ -14,7 +14,7 @@ import shutil
 import pandas as pd
 
 
-def kernel_sync(current_dir: str, local: str, sha_folder: str) -> None:
+def telemetry_info_sync(current_dir: str, local: str, sha_folder: str) -> None:
     """Check and merge telemetry.
 
     Args:
@@ -52,7 +52,7 @@ def kernel_sync(current_dir: str, local: str, sha_folder: str) -> None:
     os.remove(temp_tele_path)
 
 
-def telemetry_info_sync(current_dir: str, local: str, sha_folder: str) -> None:
+def kernel_sync(current_dir: str, local: str, sha_folder: str) -> None:
     """Check metadata file function.
 
     Args:
@@ -101,11 +101,20 @@ def sync_endpoint(
         Ok or error
     """
     try:
+        detail_sync = ""
         if kernel_metadata_sync:
             kernel_sync(current_dir, local, sha_folder)
+            detail_sync += " - kernel metadata"
         if telemetry_sync:
             telemetry_info_sync(current_dir, local, sha_folder)
-        return "sync data done !"
+            detail_sync += " - telemetry data"
+        detail_sync += " - nothing to sync" if detail_sync == "" else None
+        return_sync = (
+            "sync data done !" + detail_sync
+            if detail_sync == ""
+            else "nothing to sync !"
+        )
+        return return_sync
 
     except Exception as error_sync:  # pylint: disable=broad-except
         print("Error : ", error_sync)

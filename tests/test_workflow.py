@@ -54,6 +54,9 @@ class TestUtils(TestCase):
         self.assertTrue(
             bool(
                 sync_result
-                in ("sync data done !", "An error occurred, lockfile unlock.")
+                in (
+                    "sync data done ! - kernel metadata - telemetry data",
+                    "An error occurred, lockfile unlock.",
+                )
             )
         )
