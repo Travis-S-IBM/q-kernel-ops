@@ -4,3 +4,4 @@ qiskit_ibm_runtime
 pandas==1.4.1
 pyarrow==7.0.0
 Jinja2>=2.11.2
+pympler~=0.9

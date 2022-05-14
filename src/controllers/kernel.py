@@ -10,6 +10,7 @@
 """
 
 import sys
+from pympler import asizeof
 
 from src.circuits import circuit_2, circuit_5, circuit_10, circuit_18, kernel_circuit
 from src.data import kernel_metadata, kernel_telemetry
@@ -116,7 +117,7 @@ def kernel_endpoint(
         job_id=telemetry_info[0],
         time_queue=float(telemetry_info[1]),
         time_simu=float(telemetry_info[2]),
-        payload_size=sys.getsizeof(kernel_cirq),
+        payload_size=asizeof.asizeof(kernel_cirq),
         width=width,
         layer=layer,
         shots=shots,
