@@ -1,5 +1,5 @@
 fire==0.4.0
-qiskit~=0.36.0
+qiskit
 qiskit_ibm_runtime
 pandas==1.4.1
 pyarrow==7.0.0
