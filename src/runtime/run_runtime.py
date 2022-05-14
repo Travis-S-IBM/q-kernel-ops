@@ -59,7 +59,7 @@ def run_runtime(
             )
         except Exception as launch_error:  # pylint: disable=broad-except
             tele_comment = known_exception(str(launch_error))
-            telemetry_info = ["None", 0, 0, tele_comment]
+            telemetry_info = ["Null", 0, 0, tele_comment]
             catch_exception = str(launch_error)
             if program_id == "circuit-runner":
                 result = {"results": [], "metadata": []}
@@ -91,7 +91,7 @@ def run_runtime(
 
     except Exception as runtime_error:  # pylint: disable=broad-except
         tele_comment = known_exception(str(runtime_error))
-        telemetry_info = ["None", 0, 0, tele_comment]
+        telemetry_info = ["Null", 0, 0, tele_comment]
         catch_exception = str(runtime_error)
         if program_id == "circuit-runner":
             result = {"results": [], "metadata": []}
