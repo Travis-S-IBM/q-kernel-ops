@@ -25,6 +25,11 @@ def known_exception(runtime_error: str) -> str:
         print(
             "::set-output name={name}::{value}".format(name="Error", value=tele_comment)
         )
+    elif "Unable to retrieve job result" in runtime_error:
+        tele_comment = "OOM"
+        print(
+            "::set-output name={name}::{value}".format(name="Error", value=tele_comment)
+        )
 
     else:
         tele_comment = "Unknown Error"
