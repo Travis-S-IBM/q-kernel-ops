@@ -20,7 +20,7 @@ def known_exception(runtime_error: str) -> str:
         print(
             "::set-output name={name}::{value}".format(name="Error", value=tele_comment)
         )
-   elif "too many 500 error responses" in runtime_error:
+    elif "too many 500 error responses" in runtime_error:
         tele_comment = "Network Error"
         print(
             "::set-output name={name}::{value}".format(name="Error", value=tele_comment)
