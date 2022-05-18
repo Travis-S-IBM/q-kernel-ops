@@ -5,3 +5,4 @@ nbconvert
 plotly
 kaleido
 python-dotenv
+requests
