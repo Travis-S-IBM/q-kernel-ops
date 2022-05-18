@@ -4,3 +4,4 @@ Jinja2>=2.11.2
 nbconvert
 plotly
 kaleido
+python-dotenv
