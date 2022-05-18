@@ -39,10 +39,12 @@ def telemetry_info_sync(current_dir: str, local: str, sha_folder: str) -> None:
         shutil.copyfile(sha_tele_path, local_tele_path)
     else:
         sha_tele = pd.read_feather(sha_tele_path)
-        for index, jobid in enumerate(temp_tele["job_id"].tolist()):
+        temp_job = temp_tele["job_id"].tolist()
+        for index, jobid in enumerate(temp_job):
             if jobid in sha_tele["job_id"].tolist():
-                temp_tele = temp_tele.drop(labels=index, axis=0)
-                temp_tele.reset_index(drop=True, inplace=True)
+                if not temp_tele.empty:
+                    temp_tele = temp_tele.drop(labels=index, axis=0)
+        temp_tele.reset_index(drop=True, inplace=True)
         if not temp_tele.empty:
             final_tele = pd.concat([temp_tele, sha_tele], ignore_index=True)
             final_tele.reset_index(drop=True, inplace=True)
@@ -108,10 +110,10 @@ def sync_endpoint(
         if telemetry_sync:
             telemetry_info_sync(current_dir, local, sha_folder)
             detail_sync += " - telemetry data"
-        detail_sync += " - nothing to sync" if detail_sync == "" else None
+        detail_sync += " - nothing to sync" if detail_sync == "" else ""
         return_sync = (
             "sync data done !" + detail_sync
-            if detail_sync == ""
+            if detail_sync != ""
             else "nothing to sync !"
         )
         return return_sync
