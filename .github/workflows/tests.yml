@@ -2,10 +2,22 @@ name: Tests
 
 on:
   push:
-    branches:
-      - master
-  pull_request:
-
+#    branches:
+#      - master
+    paths-ignore:
+      - '**.md'
+      - '**.ipynb'
+      - 'resources/**'
+      - 'studies/**'
+      - 'image/**'
+## Unable until the repo began public
+  #pull_request:
+  #  paths-ignore:
+  #    - '**.md'
+  #    - '**.ipynb'
+  #    - 'resources/**'
+  #    - 'studies/**'
+  #    - 'image/**'
 
 jobs:
   lint:

@@ -1,3 +1,3 @@
 """Runtime functions and classes."""
 
-from .run_sampler import run_sampler
+from .run_runtime import run_runtime

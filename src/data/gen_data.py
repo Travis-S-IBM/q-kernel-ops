@@ -15,9 +15,8 @@ import pandas as pd
 
 def kernel_metadata(
     circuit_tpl_id: [int],
+    job_id: str,
     width: int,
-    layer: int,
-    shots: int,
     seed1: [int],
     seed2: [int],
     backend: str,
@@ -27,9 +26,8 @@ def kernel_metadata(
 
     Args:
         circuit_tpl_id: list of circuit id to run as template
+        job_id: id of the experiment
         width: number of qubits
-        layer: number of reps for the tpl
-        shots: number of shots for the circuit
         seed1: seed for x axes
         seed2: seed for y axes
         backend: backend used for the experiment
@@ -46,24 +44,34 @@ def kernel_metadata(
 
     for circ_index, circuit in enumerate(circuit_tpl_id):
         fidelity = []
-        min_lim = int(
-            circ_index * len(runtime_result["quasi_dists"]) / len(circuit_tpl_id)
-        )
-        max_lim = int(
-            len(runtime_result["quasi_dists"]) / len(circuit_tpl_id) + min_lim
-        )
-        for i in range(min_lim, max_lim):
-            if runtime_result["quasi_dists"][i].get(wanted_result) is not None:
-                fidelity.append(runtime_result["quasi_dists"][i][wanted_result])
-            elif runtime_result["quasi_dists"][i].get("0") is not None:
-                fidelity.append(runtime_result["quasi_dists"][i]["0"])
-            else:
-                fidelity.append(0)
+
+        if backend == "simulator_statevector":
+            min_lim = int(
+                circ_index * len(runtime_result["results"]) / len(circuit_tpl_id)
+            )
+            max_lim = int(
+                len(runtime_result["results"]) / len(circuit_tpl_id) + min_lim
+            )
+            for i in range(min_lim, max_lim):
+                fidelity.append(runtime_result["results"][i]["header"]["global_phase"])
+
+        else:
+            min_lim = int(
+                circ_index * len(runtime_result["quasi_dists"]) / len(circuit_tpl_id)
+            )
+            max_lim = int(
+                len(runtime_result["quasi_dists"]) / len(circuit_tpl_id) + min_lim
+            )
+            for i in range(min_lim, max_lim):
+                if runtime_result["quasi_dists"][i].get(wanted_result) is not None:
+                    fidelity.append(runtime_result["quasi_dists"][i][wanted_result])
+                elif runtime_result["quasi_dists"][i].get("0") is not None:
+                    fidelity.append(runtime_result["quasi_dists"][i]["0"])
+                else:
+                    fidelity.append(0)
 
         fea_file = {
-            "width": width,
-            "layers": layer,
-            "shots": shots,
+            "job_id": job_id,
             "seed_x": seed1,
             "seed_y": seed2,
             "fidelity": fidelity,

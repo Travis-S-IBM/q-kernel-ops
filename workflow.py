@@ -21,6 +21,10 @@ python workflow.py view_kernel --file_name="kernels-2-ideal.csv"
 ```
 python workflow.py view_telemetry
 ```
+6. To sync data files with anonther folder
+```
+python workflow.py sync_data
+```
 """
 import fire
 

@@ -21,6 +21,8 @@ def kernel_telemetry(
     payload_size: int,
     width: int,
     layer: int,
+    shots: int,
+    program_id: str,
     nb_circuits: int,
     comment: str,
 ) -> str:
@@ -34,6 +36,8 @@ def kernel_telemetry(
         payload_size: size of the payload send into the Runtime
         width: number of qubits
         layer: number of reps for the tpl
+        shots: number of shots of the experiments
+        program_id: id of the program used
         nb_circuits: number of circuits in the payload
         comment: status of the Runtime, can be SUCCESS or error with why
 
@@ -50,6 +54,10 @@ def kernel_telemetry(
         list_width.append(width)
         list_layers = old_file["layers"].tolist()
         list_layers.append(layer)
+        list_shots = old_file["shots"].tolist()
+        list_shots.append(shots)
+        list_program_id = old_file["program"].tolist()
+        list_program_id.append(program_id)
         list_circuit_id = old_file["circuit_id"].tolist()
         list_circuit_id.append(str(circuit_tpl_id))
         list_job_id = old_file["job_id"].tolist()
@@ -69,6 +77,8 @@ def kernel_telemetry(
         list_layers = [layer]
         list_circuit_id = [str(circuit_tpl_id)]
         list_job_id = [job_id]
+        list_shots = [shots]
+        list_program_id = [program_id]
         list_time_queue = [time_queue]
         list_time_simu = [time_simu]
         list_payload_size = [payload_size]
@@ -76,10 +86,12 @@ def kernel_telemetry(
         list_comment = [comment]
 
     fea_file = {
+        "job_id": list_job_id,
         "width": list_width,
         "layers": list_layers,
         "circuit_id": list_circuit_id,
-        "job_id": list_job_id,
+        "shots": list_shots,
+        "program": list_program_id,
         "time_queue": list_time_queue,
         "time_simu": list_time_simu,
         "payload_size": list_payload_size,
