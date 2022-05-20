@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-VERSION=0.0.1
+VERSION=0.0.3
 
 #ANARCH=aarch64
 #TAGARCH=a
@@ -22,15 +22,15 @@ export TAG=${VERSION}-${TAGARCH}
 
 ANACONDA_INSTALLER=Anaconda3-${ANYEAR}.${ANVERS}-${ANOS}-${ANARCH}.sh
 
-cp ../requirements*.txt . 
-sed -i 's/pyarrow/arrow/g' requirements.txt
+cp ../requirements.txt . 
+cp ../studies/requirements.txt ./requirements-dev.txt
+sed -i '/pyarrow/d' requirements.txt
+sed -i '/pyarrow/d' requirements-dev.txt
 
 podman build .  -t quay.io/qiskit/qmlbuild:${TAG} --build-arg=ANCONDA_INSTALLER=${ANACONDA_INSTALLER} --file=Dockerbuild
 podman push quay.io/qiskit/qmlbuild:${TAG}
 
-rm requirements*.txt
-
 cp -r ../src .
 cp ../workflow.py .
 
-podman build .  -t quay.io/qiskit/qmlrun:${TAG} 
+#podman build .  -t quay.io/qiskit/qmlrun:${TAG} 
