@@ -15,13 +15,14 @@
 
 export REPO=q-kernel-ops
 export DATA=resources/kernel_metadata
+export PATH=${HOME}/merged
 
-podman run -d -v ${HOME}/${REPO}/${DATA}:/${DATA} \
+podman run -d -v ${PATH}/${REPO}/${DATA}:/${DATA} \
        -e QS_TOKEN=${QS_TOKEN}                    \
        -e BACKEND="ibmq_qasm_simulator"           \
        -e MATRIX_SIZE=64                          \
        -e CIRCUIT_ID=2                            \
        -e LAYER=2                                 \
-       quay.io/qiskit/qmlrun:0.0.1-z 
+       quay.io/qiskit/qmlrun:0.0.2-z 
 
 
