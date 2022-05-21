@@ -28,11 +28,9 @@ RUN source /root/.bashrc       &&          \
     pip install chompack 
 
 
-COPY requirements-dev.txt .
 COPY requirements.txt .
 
 RUN source /root/.bashrc       &&          \
-    pip install -r requirements-dev.txt && \
     pip install -r requirements.txt
 
 RUN git clone https://github.com/apache/arrow.git && cd arrow && \
@@ -58,3 +56,5 @@ RUN git clone https://github.com/apache/arrow.git && cd arrow && \
                   -Dre2_SOURCE=BUNDLED               \
                   -Dutf8proc_SOURCE=BUNDLED &&       \
    make install && cd ../../python && python setup.py build_ext --inplace
+
+
