@@ -1,7 +1,5 @@
-FROM quay.io/qiskit/qmlbuild:0.0.3-z
+FROM quay.io/qiskit/qmlpre:0.0.3-z
 
-COPY src ./src
-COPY workflow.py ./workflow.py
 
 
 ENV CIRCUIT_ID 2

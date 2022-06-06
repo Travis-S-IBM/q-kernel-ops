@@ -1,0 +1,12 @@
+FROM quay.io/qiskit/qmlbuild:0.0.3-z
+
+COPY src ./src
+COPY workflow.py ./workflow.py
+
+
+RUN source /root/.bashrc && cd /arrow/python && export ARROW_HOME=/usr && \
+    python setup.py build_ext --build-type=release bdist_wheel && \
+    python setup.py install_lib
+
+RUN ldconfig -v
+

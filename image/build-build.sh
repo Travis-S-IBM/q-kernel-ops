@@ -33,4 +33,5 @@ podman push quay.io/qiskit/qmlbuild:${TAG}
 cp -r ../src .
 cp ../workflow.py .
 
-#podman build .  -t quay.io/qiskit/qmlrun:${TAG} 
+podman build .  -t quay.io/qiskit/qmlpre:${TAG} --file=Dockerprereq
+podman push quay.io/qiskit/qmlpre:${TAG} 
