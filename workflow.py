@@ -13,15 +13,24 @@ python workflow.py kernel_flow --circuit_tpl_id=[2,5]
 python workflow.py kernel_flow --circuit_tpl_id=[5] --matrix_size=[1,1]
 :warning: You can't use the option --seed1 and --seed2 if you use --matrix_size
 ```
-4. To decode and access the data from metadata kernel files
+4. Run only the completion flow with in order to generate a full matrix data.
+```shell
+python workflow.py kernel_flow --file_name="kernels-2-ideal.csv" --nb_qubits=3
+:warning: You can't use the option --seed1 and --seed2 if you use --matrix_size
+```
+5. To decode and access the data from metadata kernel files
 ```
 python workflow.py view_kernel --file_name="kernels-2-ideal.csv"
 ```
-5. To decode and access the data from the telemetry file
+6. To decode and access the data from the telemetry file
 ```
 python workflow.py view_telemetry
 ```
-6. To sync data files with anonther folder
+7. To decode and access the data from completion matrix files
+```
+python workflow.py view_matrix --file_name="kernels-2-ideal.csv.npy"
+```
+8. To sync data files with another folder
 ```
 python workflow.py sync_data
 ```
