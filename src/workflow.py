@@ -168,7 +168,7 @@ class Workflow:
 
         save(dir_save + file_save, matrix_cmpl.final_cmpl)
 
-        return str(backend + "/" + file_save)
+        return str(backend + "/" + file_save + ".npy")
 
     @staticmethod
     def view_kernel(
