@@ -3,6 +3,7 @@ import os
 from unittest import TestCase
 from qiskit_ibm_runtime import QiskitRuntimeService
 import pandas as pd
+from cvxopt import matrix
 from src.workflow import Workflow
 
 
@@ -38,6 +39,21 @@ class TestUtils(TestCase):
         """Test to test the view kernel command."""
         data_file = Workflow.view_kernel(file_name="kernels-2-ideal.csv")
         self.assertTrue(isinstance(data_file, pd.DataFrame))
+
+    def test_completion_flow(self):
+        """Test for Completion flow command."""
+        file_name = "kernels-2-ideal.csv"
+        backend = "ibmq_qasm_simulator"
+        numpy_files = Workflow.completion_flow(
+            file_name=file_name, nb_qubits=3, backend=backend
+        )
+
+        self.assertEqual(numpy_files, backend + "/cmpl_" + file_name + ".npy")
+
+    def test_view_matrix(self):
+        """Test to test the view matrix command."""
+        data_file = Workflow.view_matrix(file_name="cmpl_kernels-2-ideal.csv.npy")
+        self.assertTrue(isinstance(data_file, matrix))
 
     def test_view_telemetry(self):
         """Test to test the view telemetry command."""

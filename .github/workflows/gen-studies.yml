@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'resources/**'
+      - 'resources/kernel_metadata/**'
   
 jobs:
   notebook_update:
