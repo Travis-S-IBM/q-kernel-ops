@@ -3,8 +3,8 @@ import os
 from unittest import TestCase
 from qiskit_ibm_runtime import QiskitRuntimeService
 import pandas as pd
-from src.workflow import Workflow
 from cvxopt import matrix
+from src.workflow import Workflow
 
 
 def authentication():
