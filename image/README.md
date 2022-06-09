@@ -10,7 +10,7 @@ where ARCH is one of:
   - ppc64l3
   - amd64
 
-## default parameters
+## default parameters for container configuration
 
 defaults to s390x image build/anaconda architecture
 
@@ -18,7 +18,7 @@ with `TAGARCH=z` for a short version/tag
 
 
 
-### Anaconda versioning 
+#### Anaconda versioning 
 
 
 
@@ -43,7 +43,35 @@ ANVERS=11
 
 ```
 
-#build
+## build, configure runtime,  run
 
-env default
+###build containers
+
+from the `q-kernel-ops/image` directory
+```sh
 ./build-build.sh
+```
+
+###configure runtime environment variables:
+
+sample `default-env` file:
+
+```
+export CIRCUIT_ID=2
+export SHOTS=32
+export MATRIX_SIZE=5
+export NB_QUBITS=4
+export LAYER=1
+export BACKEND=ibmq_qasm_simulator
+export QS_TOKEN=<THE TOKEN FROM YOUR IBM QUANTUM ACCOUNT>
+```
+
+#run
+
+```
+env ./default-env 
+./kernel-run
+
+```
+
+
