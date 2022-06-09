@@ -5,12 +5,15 @@ import sys
 import time
 import subprocess
 from typing import List
+from cvxopt import matrix
+from numpy import save, load
 
 import pandas as pd
 from qiskit_ibm_runtime import QiskitRuntimeService
 
 from src.controllers import sync_endpoint
 from src.controllers import kernel_endpoint
+from src.controllers import Completion
 
 
 class Workflow:
@@ -107,6 +110,67 @@ class Workflow:
         )
 
     @staticmethod
+    def completion_flow(
+        file_name: str,
+        backend: str = "ibmq_qasm_simulator",
+        nb_qubits: int = None,
+        size_matrix: int = None,
+    ) -> [str]:
+        """Command for matrix completion.
+
+        Args:
+            file_name: name of the kernel to make to completion
+            backend: name of the backend
+            nb_qubits: number of qubits into the kernel (Optional)
+            size_matrix: size [x, y] of the matrix (Optional)
+
+        Return:
+            File generate
+        """
+
+        res_folder = "../resources/kernel_metadata/" + backend + "/"
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        matrix_res = pd.read_feather(
+            "{}/{}/".format(current_dir, res_folder) + file_name
+        )
+
+        # Size of the matrix check
+        if size_matrix is None:
+            size_matrix = max(matrix_res["seed_x"].tolist())
+        matrix_size = sum(1 + i for i in range(0, size_matrix))
+        matrix_data = matrix_res.head(matrix_size)
+
+        # Number of qubits check
+
+        # Init completion object
+        matrix_cmpl = Completion(
+            matrix_data=matrix_data, size_matrix=size_matrix, nb_qubits=nb_qubits
+        )
+        if len(matrix_cmpl.error) > 0:
+            sys.exit(1)
+        else:
+            print("Parameters ok.")
+
+        # Create K matrix
+        matrix_cmpl.gen_kmatrix()
+        # Matrix injection of u
+        matrix_cmpl.u_injection()
+        # Doing completion
+        matrix_cmpl.do_completion()
+        # Calc error
+        matrix_cmpl.calc_error()
+
+        # Register completed matrix
+        file_save = "cmpl_" + file_name
+        dir_save = "{}/../resources/cmpl_matrix/{}/".format(current_dir, backend)
+        if not os.path.isdir(dir_save):
+            os.makedirs(dir_save)
+
+        save(dir_save + file_save, matrix_cmpl.final_cmpl)
+
+        return str(backend + "/" + file_save + ".npy")
+
+    @staticmethod
     def view_kernel(
         file_name: str,
         backend: str = "ibmq_qasm_simulator",
@@ -161,6 +225,37 @@ class Workflow:
         )
 
         return data_fea
+
+    @staticmethod
+    def view_matrix(
+        file_name: str,
+        backend: str = "ibmq_qasm_simulator",
+        resources_path: str = "resources/cmpl_matrix",
+    ) -> matrix:
+        """Commands for decode matrix files.
+
+        Args:
+            file_name: name of the file to decode in resources/cmpl_matrix
+            backend: backend name
+            resources_path: path of the resources files
+
+        Return:
+            Return file_name decode as pandas.Dataframe
+        """
+        local = "../" + resources_path + "/" + backend
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        with open(
+            "{}/{}/{}".format(current_dir, local, file_name), "rb"
+        ) as file_matrix:
+            my_matrix = matrix(load(file_matrix))
+
+        print(
+            "::set-output name={name}::{value}".format(
+                name=file_name, value="\n" + str(my_matrix)
+            )
+        )
+
+        return my_matrix
 
     @staticmethod
     def sync_data(
