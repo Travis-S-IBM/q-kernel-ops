@@ -10,6 +10,7 @@
 # 2. now run this script
 #
 
+source ./default-env
 
 podman run -d -v ${HOME}/${REPO}/${DATA}:/${DATA} \
        -e QS_TOKEN=${QS_TOKEN}                    \
