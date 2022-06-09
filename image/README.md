@@ -45,14 +45,14 @@ ANVERS=11
 
 ## build, configure runtime,  run
 
-###build containers
+### build containers
 
 from the `q-kernel-ops/image` directory
 ```sh
 ./build-build.sh
 ```
 
-###configure runtime environment variables:
+### configure runtime environment variables:
 
 sample `default-env` file:
 
@@ -64,14 +64,22 @@ export NB_QUBITS=4
 export LAYER=1
 export BACKEND=ibmq_qasm_simulator
 export QS_TOKEN=<THE TOKEN FROM YOUR IBM QUANTUM ACCOUNT>
+export REPO=q-kernel-ops
+export DATA=resources/kernel_metadata
 ```
 
-#run
+also 
+
+### run
 
 ```
 env ./default-env 
 ./kernel-run
 
 ```
+
+### get results
+
+ in csv files in the data volume you specified with the REPO and DATA environment variables
 
 
