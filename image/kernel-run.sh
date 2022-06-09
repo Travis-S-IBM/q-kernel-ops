@@ -22,6 +22,6 @@ podman run -d -v ${HOME}/${REPO}/${DATA}:/${DATA} \
        -e MATRIX_SIZE=64                          \
        -e CIRCUIT_ID=2                            \
        -e LAYER=2                                 \
-       quay.io/qiskit/qmlrun:0.0.1-z 
+       quay.io/qiskit/qmlrun:0.0.3-z 
 
 

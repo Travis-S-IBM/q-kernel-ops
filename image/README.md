@@ -18,7 +18,9 @@ with `TAGARCH=z` for a short version/tag
 
 
 
-### Anaconda versioning
+### Anaconda versioning 
+
+
 
 ```
 VERSION=0.0.0
@@ -40,3 +42,8 @@ ANYEAR=2021
 ANVERS=11
 
 ```
+
+#build
+
+env default
+./build-build.sh
