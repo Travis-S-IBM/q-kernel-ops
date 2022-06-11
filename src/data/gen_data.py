@@ -86,6 +86,6 @@ def kernel_metadata(
 
         data_fea.to_feather("{}/{}/".format(current_dir, dest) + data_name)
 
-        files.append(data_name)
+        files.append(backend + "/" + data_name)
 
     return files

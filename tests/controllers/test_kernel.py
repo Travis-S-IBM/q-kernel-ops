@@ -11,12 +11,15 @@ class TestUtils(TestCase):
         """Test for kernel endpoint function."""
         authentication()
         circuits_tpl = [5, 2]
+        backend = "ibmq_qasm_simulator"
         feather_files = kernel_endpoint(
-            circuit_tpl_id=circuits_tpl, seed_x=[42], seed_y=[4242]
+            circuit_tpl_id=circuits_tpl, seed_x=[42], seed_y=[4242], backend=backend
         )
 
         for circuit, fea_file in zip(circuits_tpl, feather_files):
-            self.assertEqual(fea_file, "kernels-" + str(circuit) + "-ideal.csv")
+            self.assertEqual(
+                fea_file, backend + "/kernels-" + str(circuit) + "-ideal.csv"
+            )
 
     def test_gen_kernel_components(self):
         """Test for gen circuits template & gen kernel circuits function."""
