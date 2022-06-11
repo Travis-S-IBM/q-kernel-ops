@@ -53,7 +53,7 @@ class Workflow:
     @staticmethod
     def kernel_flow(
         circuit_tpl_id: [int],
-        width: int = 4,
+        width: int = 3,
         layer: int = 1,
         seed1: int = 42,
         seed2: int = 4242,
@@ -173,7 +173,7 @@ class Workflow:
     @staticmethod
     def end2end_flow(
         circuit_tpl_id: [int],
-        width: int = 4,
+        width: int = 3,
         layer: int = 1,
         seed1: int = 42,
         seed2: int = 4242,
