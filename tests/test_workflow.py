@@ -28,12 +28,15 @@ class TestUtils(TestCase):
         """Test for Kernel flow command."""
         authentication()
         circuits_tpl = [5]
+        backend = "ibmq_qasm_simulator"
         feather_files = Workflow.kernel_flow(
-            circuit_tpl_id=circuits_tpl, matrix_size=[1, 1]
+            circuit_tpl_id=circuits_tpl, matrix_size=[1, 1], backend=backend
         )
 
         for circuit, fea_file in zip(circuits_tpl, feather_files):
-            self.assertEqual(fea_file, "kernels-" + str(circuit) + "-ideal.csv")
+            self.assertEqual(
+                fea_file, backend + "/kernels-" + str(circuit) + "-ideal.csv"
+            )
 
     def test_view_kernel(self):
         """Test to test the view kernel command."""
