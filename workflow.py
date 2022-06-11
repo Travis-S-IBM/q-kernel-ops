@@ -1,8 +1,13 @@
 """Entrypoint for CLI
 Available commands:
-1. Register the session in disk space
+0. Register the session in disk space
 ```shell
 python workflow.py authentication --channel="cloud" --token="your_very_long_token" --instance="ibm-q/open/main"
+```
+1. Run the full workflow.
+```shell
+python workflow.py end2end_flow --circuit_tpl_id=[5] --matrix_size=[1,1]
+:warning: You can't use the option --seed1 and --seed2 if you use --matrix_size
 ```
 2. Run only the kernel flow with seed1 and seed2.
 ```shell

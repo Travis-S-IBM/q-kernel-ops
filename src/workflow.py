@@ -53,7 +53,7 @@ class Workflow:
     @staticmethod
     def kernel_flow(
         circuit_tpl_id: [int],
-        width: int = 4,
+        width: int = 3,
         layer: int = 1,
         seed1: int = 42,
         seed2: int = 4242,
@@ -169,6 +169,56 @@ class Workflow:
         save(dir_save + file_save, matrix_cmpl.final_cmpl)
 
         return str(backend + "/" + file_save + ".npy")
+
+    @staticmethod
+    def end2end_flow(
+        circuit_tpl_id: [int],
+        width: int = 3,
+        layer: int = 1,
+        seed1: int = 42,
+        seed2: int = 4242,
+        matrix_size: List[int] = None,
+        backend: str = "ibmq_qasm_simulator",
+        shots: int = 1024,
+    ):
+        """Command for end 2 end Workflow.
+
+        Args:
+            circuit_tpl_id: list of circuit id to run as template
+            width: number of qubits
+            layer: number of reps for the tpl
+            seed1: seed for x axes
+            seed2: seed for y axes
+            matrix_size: matrix size for seed coordinate [x, y]
+            backend: backend for running circuit
+            shots: number of shots for the circuit
+
+        Return:
+            Status of the workflow.
+        """
+        kernel_metadata = Workflow.kernel_flow(
+            circuit_tpl_id=circuit_tpl_id,
+            width=width,
+            layer=layer,
+            seed1=seed1,
+            seed2=seed2,
+            matrix_size=matrix_size,
+            backend=backend,
+            shots=shots,
+        )
+        print("Kernel generated : ", kernel_metadata)
+
+        for kernel in kernel_metadata:
+            name_backend = kernel.split("/")
+            matrix_completed = Workflow.completion_flow(
+                file_name=name_backend[1],
+                backend=name_backend[0],
+                nb_qubits=width,
+                size_matrix=matrix_size[0],
+            )
+            print("Matrix generated : ", matrix_completed)
+
+        return "Workflow end successfully !"
 
     @staticmethod
     def view_kernel(
