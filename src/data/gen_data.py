@@ -15,7 +15,7 @@ import pandas as pd
 
 def kernel_metadata(
     circuit_tpl_id: [int],
-    job_id: str,
+    job_id: [str],
     width: int,
     seed1: [int],
     seed2: [int],
@@ -26,7 +26,7 @@ def kernel_metadata(
 
     Args:
         circuit_tpl_id: list of circuit id to run as template
-        job_id: id of the experiment
+        job_id: array of ids of the experiments
         width: number of qubits
         seed1: seed for x axes
         seed2: seed for y axes
@@ -71,7 +71,7 @@ def kernel_metadata(
                     fidelity.append(0)
 
         fea_file = {
-            "job_id": job_id,
+            "job_id": str(job_id),
             "seed_x": seed1,
             "seed_y": seed2,
             "fidelity": fidelity,

@@ -8,7 +8,6 @@
 #
 #############################################
 """
-from typing import Tuple
 from time import time
 
 from qiskit_ibm_runtime import QiskitRuntimeService
@@ -16,94 +15,115 @@ from qiskit import QuantumCircuit
 from src.exception import known_exception
 
 
-def run_runtime(
-    circuits: [QuantumCircuit], backend="ibmq_qasm_simulator", shots=1024, verbose=False
-) -> Tuple[dict, list, str, str]:
-    """Function to run the final circuit on quantum computer.
+class Runtime:
+    """"""
 
-    Args:
-        circuits: list of circuits
-        backend: quantum computer name or simulator
-        shots: number of shots
-        verbose: True/False
+    def __init__(self):
+        self.circuits = []
+        self.backend = "ibmq_qasm_simulator"
+        self.shots = 1024
+        self.payload_limit = 2e9
 
-    Return:
-        Result from the running + telemetry info
-    """
-    if backend == "simulator_statevector":
-        program_id = "circuit-runner"
-    else:
-        for cirq in circuits:
-            cirq.measure_all()
-        program_id = "sampler"
+        self.program_id = "Null"
+        self.job_id = "Null"
+        self.time_queue = 0
+        self.time_simu = 0
+        self.tele_comment = "SUCCESS"
+        self.catch_exception = None
+        self.result = {}
 
-    service = QiskitRuntimeService()
-    program_inputs = {
-        "circuits": circuits,
-        "circuit_indices": list(range(len(circuits))),
-        "run_options": {"shots": shots},
-    }
+    def run_runtime(
+        self,
+        circuits: [QuantumCircuit],
+        backend="ibmq_qasm_simulator",
+        shots=1024,
+        verbose=False,
+    ) -> None:
+        """Function to run the final circuit on quantum computer.
 
-    options = {"backend_name": backend}
+        Args:
+            circuits: list of circuits
+            backend: quantum computer name or simulator
+            shots: number of shots
+            verbose: True/False
 
-    # Runtime exceptions
-    try:
-        start_time = time()
+        Return:
+            Result from the running + telemetry info
+        """
+        self.circuits = circuits
+        self.backend = backend
+        self.shots = shots
 
-        # Launch exceptions
+        if self.backend == "simulator_statevector":
+            self.program_id = "circuit-runner"
+        else:
+            for cirq in self.circuits:
+                cirq.measure_all()
+            self.program_id = "sampler"
+
+        service = QiskitRuntimeService()
+        program_inputs = {
+            "circuits": self.circuits,
+            "circuit_indices": list(range(len(self.circuits))),
+            "run_options": {"shots": self.shots},
+        }
+
+        options = {"backend_name": self.backend}
+
+        # Runtime exceptions
         try:
-            job = service.run(
-                program_id=program_id,
-                options=options,
-                inputs=program_inputs,
-            )
-        except Exception as launch_error:  # pylint: disable=broad-except
-            tele_comment = known_exception(str(launch_error))
-            telemetry_info = ["Null", 0, 0, tele_comment]
-            catch_exception = str(launch_error)
-            if program_id == "circuit-runner":
-                result = {"results": [], "metadata": []}
-            if program_id == "sampler":
-                result = {"quasi_dists": [], "metadata": {}}
-            return result, telemetry_info, catch_exception, program_id
+            start_time = time()
 
-        while str(job.status()) == "JobStatus.QUEUED":
-            pass
-        time_queue = time() - start_time
+            # Launch exceptions
+            try:
+                job = service.run(
+                    program_id=self.program_id,
+                    options=options,
+                    inputs=program_inputs,
+                )
+            except Exception as launch_error:  # pylint: disable=broad-except
+                self.tele_comment = known_exception(str(launch_error))
+                self.catch_exception = str(launch_error)
+                if self.program_id == "circuit-runner":
+                    self.result = {"results": [], "metadata": []}
+                if self.program_id == "sampler":
+                    self.result = {"quasi_dists": [], "metadata": []}
+                return
 
-        # Simulation exceptions
-        try:
-            while str(job.status()) == "JobStatus.RUNNING":
+            while str(job.status()) == "JobStatus.QUEUED":
                 pass
-            result = job.result()
-        except Exception as simu_error:  # pylint: disable=broad-except
-            tele_comment = known_exception(str(simu_error))
-            time_simu = time() - time_queue - start_time
-            telemetry_info = [job.job_id, time_queue, time_simu, tele_comment]
-            catch_exception = str(simu_error)
-            if program_id == "circuit-runner":
-                result = {"results": [], "metadata": []}
-            if program_id == "sampler":
-                result = {"quasi_dists": [], "metadata": []}
-            return result, telemetry_info, catch_exception, program_id
+            self.time_queue = time() - start_time
+            self.job_id = job.job_id
 
-        time_simu = time() - time_queue - start_time
+            # Simulation exceptions
+            try:
+                while str(job.status()) == "JobStatus.RUNNING":
+                    pass
+                self.result = job.result()
+            except Exception as simu_error:  # pylint: disable=broad-except
+                self.time_simu = time() - self.time_queue - start_time
+                self.tele_comment = known_exception(str(simu_error))
+                self.catch_exception = str(simu_error)
+                if self.program_id == "circuit-runner":
+                    self.result = {"results": [], "metadata": []}
+                if self.program_id == "sampler":
+                    self.result = {"quasi_dists": [], "metadata": []}
+                return
 
-    except Exception as runtime_error:  # pylint: disable=broad-except
-        tele_comment = known_exception(str(runtime_error))
-        telemetry_info = ["Null", 0, 0, tele_comment]
-        catch_exception = str(runtime_error)
-        if program_id == "circuit-runner":
-            result = {"results": [], "metadata": []}
-        elif program_id == "sampler":
-            result = {"quasi_dists": [], "metadata": []}
-        return result, telemetry_info, catch_exception, program_id
+            self.time_simu = time() - self.time_queue - start_time
 
-    if verbose:
-        print(result)
+        except Exception as runtime_error:  # pylint: disable=broad-except
+            self.tele_comment = known_exception(str(runtime_error))
+            self.catch_exception = str(runtime_error)
+            if self.program_id == "circuit-runner":
+                self.result = {"results": [], "metadata": []}
+            elif self.program_id == "sampler":
+                self.result = {"quasi_dists": [], "metadata": []}
+            return
 
-    tele_comment = "SUCCESS"
-    catch_exception = "None"
+        if verbose:
+            print(self.result)
 
-    telemetry_info = [job.job_id, time_queue, time_simu, tele_comment]
-    return result, telemetry_info, catch_exception, program_id
+        self.tele_comment = "SUCCESS"
+
+        return
