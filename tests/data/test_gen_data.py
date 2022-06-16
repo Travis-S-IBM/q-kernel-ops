@@ -3,7 +3,7 @@ import sys
 from typing import List
 from unittest import TestCase
 from src.data import kernel_metadata, kernel_telemetry
-from src.controllers import gen_kernel_circuits, gen_circuits_tpl
+from src.controllers import Kernel
 from tests.runtime import return_sampler, return_circuit_runner
 
 
@@ -78,22 +78,28 @@ class TestUtils(TestCase):
 
     def test_kernel_telemetry(self):
         """Test to test the kernel telemetry function."""
-        circuits_tpl = gen_circuits_tpl(circuit_tpl_id=[2], width=4, layer=1)
-        kernel_cirq = gen_kernel_circuits(
-            circuits_tpl=circuits_tpl, seed_x=[0, 1, 1], seed_y=[0, 0, 1]
+        kernel_circuits = Kernel(
+            circuit_tpl_id=[2],
+            width=4,
+            layer=1,
+            seed_x=[0, 1, 1],
+            seed_y=[0, 0, 1],
         )
+        kernel_circuits.gen_circuits_tpl()
+        # Gen kernel circuits
+        kernel_circuits.gen_kernel_circuits()
 
         _, te_sampler, _, program_id = return_sampler.get_sampler()
 
         fea_files = kernel_telemetry(
-            circuit_tpl_id=[2],
+            circuit_tpl_id=kernel_circuits.circuit_tpl_id,
             job_id=te_sampler[0],
             time_queue=float(te_sampler[1]),
             time_simu=float(te_sampler[2]),
-            payload_size=sys.getsizeof(kernel_cirq),
-            width=4,
-            layer=1,
-            shots=1024,
+            payload_size=sys.getsizeof(kernel_circuits.kernel_cirq),
+            width=kernel_circuits.width,
+            layer=kernel_circuits.layer,
+            shots=kernel_circuits.shots,
             program_id=program_id,
             nb_circuits=6,
             comment=te_sampler[3],
@@ -103,14 +109,14 @@ class TestUtils(TestCase):
         _, te_sampler, _, program_id = return_circuit_runner.get_circuit_runner()
 
         fea_files = kernel_telemetry(
-            circuit_tpl_id=[2],
+            circuit_tpl_id=kernel_circuits.circuit_tpl_id,
             job_id=te_sampler[0],
             time_queue=float(te_sampler[1]),
             time_simu=float(te_sampler[2]),
-            payload_size=sys.getsizeof(kernel_cirq),
-            width=4,
-            layer=1,
-            shots=1024,
+            payload_size=sys.getsizeof(kernel_circuits.kernel_cirq),
+            width=kernel_circuits.width,
+            layer=kernel_circuits.layer,
+            shots=kernel_circuits.shots,
             program_id=program_id,
             nb_circuits=6,
             comment=te_sampler[3],
