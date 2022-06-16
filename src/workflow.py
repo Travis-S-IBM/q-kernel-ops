@@ -12,8 +12,7 @@ import pandas as pd
 from qiskit_ibm_runtime import QiskitRuntimeService
 
 from src.controllers import sync_endpoint
-from src.controllers import kernel_endpoint
-from src.controllers import Completion
+from src.controllers import Completion, Kernel
 
 
 class Workflow:
@@ -60,7 +59,6 @@ class Workflow:
         matrix_size: List[int] = None,
         backend: str = "ibmq_qasm_simulator",
         shots: int = 1024,
-        verbose: bool = False,
     ) -> [str]:
         """Command for kernel matrix generation.
 
@@ -73,7 +71,6 @@ class Workflow:
             matrix_size: matrix size for seed coordinate [x, y]
             backend: backend for running circuit
             shots: number of shots for the circuit
-            verbose: print all kind of information
 
         Returns:
             Array of data files name
@@ -98,7 +95,7 @@ class Workflow:
             seed_x.append(seed1)
             seed_y.append(seed2)
 
-        return kernel_endpoint(
+        kernel_circuits = Kernel(
             circuit_tpl_id=circuit_tpl_id,
             width=width,
             layer=layer,
@@ -106,8 +103,16 @@ class Workflow:
             seed_y=seed_y,
             backend=backend,
             shots=shots,
-            verbose=verbose,
         )
+
+        # Gen template circuit
+        kernel_circuits.gen_circuits_tpl()
+        # Gen kernel circuits
+        kernel_circuits.gen_kernel_circuits()
+        # Exec circuits
+        return_str = kernel_circuits.exec_circuits()
+
+        return return_str
 
     @staticmethod
     def completion_flow(

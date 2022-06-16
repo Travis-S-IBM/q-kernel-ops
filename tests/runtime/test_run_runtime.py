@@ -1,6 +1,6 @@
 """Tests for Kernel commands."""
 from unittest import TestCase
-from src.runtime import run_runtime
+from src.runtime import Runtime
 from src.circuits import circuit_2, circuit_5, kernel_circuit
 from tests.test_workflow import authentication
 
@@ -12,36 +12,27 @@ class TestUtils(TestCase):
         """Test for run sampler function."""
         authentication()
         kernel_cirq = [kernel_circuit(circuit_2(), 42, 4242)]
-        run, telemetry_info, catch_exception, program_id = run_runtime(
-            circuits=kernel_cirq
-        )
-        self.assertTrue(isinstance(run, dict))
-        self.assertEqual(len(kernel_cirq), len(run["quasi_dists"]))
-        self.assertTrue(list(telemetry_info))
-        self.assertEqual(len(telemetry_info), 4)
-        self.assertEqual(catch_exception, "None")
-        self.assertEqual(program_id, "sampler")
+        run = Runtime()
+        run.run_runtime(circuits=kernel_cirq)
+        self.assertTrue(isinstance(run.result, dict))
+        self.assertEqual(len(kernel_cirq), len(run.result["quasi_dists"]))
+        self.assertEqual(run.catch_exception, None)
+        self.assertEqual(run.program_id, "sampler")
 
         kernel_cirq = [
             kernel_circuit(circuit_2(), 42, 4242),
             kernel_circuit(circuit_5(), 24, 2424),
         ]
-        run, telemetry_info, catch_exception, program_id = run_runtime(
-            circuits=kernel_cirq
-        )
-        self.assertTrue(isinstance(run, dict))
-        self.assertEqual(len(kernel_cirq), len(run["quasi_dists"]))
-        self.assertTrue(list(telemetry_info))
-        self.assertEqual(len(telemetry_info), 4)
-        self.assertEqual(catch_exception, "None")
-        self.assertEqual(program_id, "sampler")
+        run = Runtime()
+        run.run_runtime(circuits=kernel_cirq)
+        self.assertTrue(isinstance(run.result, dict))
+        self.assertEqual(len(kernel_cirq), len(run.result["quasi_dists"]))
+        self.assertEqual(run.catch_exception, None)
+        self.assertEqual(run.program_id, "sampler")
 
-        run, telemetry_info, catch_exception, program_id = run_runtime(
-            circuits=kernel_cirq, backend="simulator_statevector"
-        )
-        self.assertTrue(isinstance(run, dict))
-        self.assertEqual(len(kernel_cirq), len(run["results"]))
-        self.assertTrue(list(telemetry_info))
-        self.assertEqual(len(telemetry_info), 4)
-        self.assertEqual(catch_exception, "None")
-        self.assertEqual(program_id, "circuit-runner")
+        run = Runtime()
+        run.run_runtime(circuits=kernel_cirq, backend="simulator_statevector")
+        self.assertTrue(isinstance(run.result, dict))
+        self.assertEqual(len(kernel_cirq), len(run.result["results"]))
+        self.assertEqual(run.catch_exception, None)
+        self.assertEqual(run.program_id, "circuit-runner")

@@ -1,3 +1,3 @@
 """Runtime functions and classes."""
 
-from .run_runtime import run_runtime
+from .run_runtime import Runtime
