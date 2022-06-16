@@ -14,7 +14,7 @@ class TestUtils(TestCase):
         kernel_cirq = [kernel_circuit(circuit_2(), 42, 4242)]
         run = Runtime()
         run.run_runtime(circuits=kernel_cirq)
-        self.assertTrue(isinstance(run, dict))
+        self.assertTrue(isinstance(run.result, dict))
         self.assertEqual(len(kernel_cirq), len(run.result["quasi_dists"]))
         self.assertEqual(run.catch_exception, "None")
         self.assertEqual(run.program_id, "sampler")
@@ -25,14 +25,14 @@ class TestUtils(TestCase):
         ]
         run = Runtime()
         run.run_runtime(circuits=kernel_cirq)
-        self.assertTrue(isinstance(run, dict))
+        self.assertTrue(isinstance(run.result, dict))
         self.assertEqual(len(kernel_cirq), len(run.result["quasi_dists"]))
         self.assertEqual(run.catch_exception, "None")
         self.assertEqual(run.program_id, "sampler")
 
         run = Runtime()
         run.run_runtime(circuits=kernel_cirq, backend="simulator_statevector")
-        self.assertTrue(isinstance(run, dict))
+        self.assertTrue(isinstance(run.result, dict))
         self.assertEqual(len(kernel_cirq), len(run.result["results"]))
         self.assertEqual(run.catch_exception, "None")
         self.assertEqual(run.program_id, "circuit-runner")

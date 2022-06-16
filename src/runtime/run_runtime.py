@@ -16,9 +16,16 @@ from src.exception import known_exception
 
 
 class Runtime:
-    """"""
+    """Runtime class.
+    Everything about Runtime object.
+    """
 
     def __init__(self):
+        """Runtime init.
+
+        Args:
+            No need specific args to setings up.
+        """
         self.circuits = []
         self.backend = "ibmq_qasm_simulator"
         self.shots = 1024

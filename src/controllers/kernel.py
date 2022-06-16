@@ -102,7 +102,12 @@ class Kernel:
                     )
                 )
 
-    def exec_circuits(self):
+    def exec_circuits(self) -> str:
+        """Function to execute the circuits through Runtime and generate telemetry and metadata.
+
+        Returns:
+            Name of the generate metadata file or the error.
+        """
         run = Runtime()
         nb_split = 1
 
@@ -140,16 +145,18 @@ class Kernel:
 
             if run.catch_exception is not None:
                 if run.tele_comment == "Unknown Error":
-                    return str(
+                    return_str = (
                         "Telemetry complete but Runtime failed ! "
                         + run.tele_comment
                         + " \nException::"
                         + run.catch_exception
                     )
                 else:
-                    return str(
+                    return_str = (
                         "Telemetry complete but Runtime failed ! " + run.tele_comment
                     )
+
+                return return_str
 
             self.list_runtimes.append(copy.deepcopy(run))
 
