@@ -13,6 +13,7 @@ from qiskit_ibm_runtime import QiskitRuntimeService
 
 from src.controllers import sync_endpoint
 from src.controllers import Completion, Kernel
+from src.data import completion_telemetry
 
 
 class Workflow:
@@ -172,6 +173,18 @@ class Workflow:
             os.makedirs(dir_save)
 
         save(dir_save + file_save, matrix_cmpl.final_cmpl)
+
+        # Gen telemetry
+        completion_telemetry(
+            size_bn=matrix_cmpl.size_bn,
+            size_ln=matrix_cmpl.size_ln,
+            over_u=matrix_cmpl.over_u,
+            size_u=matrix_cmpl.size_u,
+            time_cmpl=matrix_cmpl.time_cmpl,
+            error_mse=matrix_cmpl.mse,
+            error_norm=matrix_cmpl.norm_err,
+            comment=matrix_cmpl.comment,
+        )
 
         return str(backend + "/" + file_save + ".npy")
 

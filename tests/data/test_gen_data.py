@@ -1,8 +1,9 @@
 """Tests for data."""
 import sys
+from time import time
 from typing import List
 from unittest import TestCase
-from src.data import kernel_metadata, kernel_telemetry
+from src.data import kernel_metadata, kernel_telemetry, completion_telemetry
 from src.controllers import Kernel
 from tests.runtime import return_sampler, return_circuit_runner
 
@@ -120,5 +121,20 @@ class TestUtils(TestCase):
             program_id=program_id,
             nb_circuits=6,
             comment=te_sampler[3],
+        )
+        self.assertTrue(isinstance(fea_files, str))
+
+    def test_completion_telemetry(self):
+        """Test to test the completion telemetry function."""
+
+        fea_files = completion_telemetry(
+            size_bn=6,
+            size_ln=3,
+            over_u=1,
+            size_u=2,
+            time_cmpl=time(),
+            error_mse=0.0003,
+            error_norm=0.67,
+            comment="SUCCESS",
         )
         self.assertTrue(isinstance(fea_files, str))

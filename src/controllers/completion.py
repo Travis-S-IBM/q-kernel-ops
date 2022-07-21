@@ -8,7 +8,7 @@
 #
 #############################################
 """
-
+from time import time
 from copy import copy
 from cvxopt import matrix, sparse
 from statsmodels.stats.correlation_tools import corr_clipped
@@ -53,6 +53,8 @@ class Completion:
         self.final_cmpl = None
         self.mse = 0
         self.norm_err = 0
+        self.time_cmpl = 0
+        self.comment = ""
 
         # Gen N and n parameters
         self.size_bn = (
@@ -172,13 +174,16 @@ class Completion:
         chordal_sp += self.ku_matrix
 
         # make the completion
+        start_time = time()
         self.final_cmpl = matrix(cp.psdcompletion(chordal_sp))
+        self.time_cmpl = time() - start_time
+        self.comment = "SUCCESS"
 
     def norm_error(self):
         """Normalisation error.
 
         Return:
-            The error -> int
+            The error -> float
         """
         return np.linalg.norm(
             matrix(self.full_matrix) - self.final_cmpl, "fro"
@@ -188,7 +193,7 @@ class Completion:
         """Mean suare error.
 
         Return:
-            The error -> int
+            The error -> float
         """
         difference_array = np.subtract(matrix(self.full_matrix), self.final_cmpl)
         squared_array = np.square(difference_array)
