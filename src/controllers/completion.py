@@ -71,7 +71,7 @@ class Completion:
         # Gen rank/u parameters
         self.rank = 4**self.nb_qubits
         self.over_u = self.rank
-        self.size_u = self.size_ln + self.size_bn - 1
+        self.size_maxu = self.size_ln + self.size_bn - 1
         check_size = self.over_u + self.size_ln
         self.error.append(
             None
@@ -154,7 +154,7 @@ class Completion:
         self.ku_matrix = copy(self.np_matrix)
 
         for tab_u in range(self.over_u):
-            listu_i = range(self.size_bn - 1, self.size_u)
+            listu_i = range(self.size_bn - 1, self.size_maxu)
             fix_tab = [self.size_bn - (tab_u + 1) for i in listu_i]
 
             for fix, index in zip(fix_tab, listu_i):

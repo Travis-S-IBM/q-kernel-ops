@@ -110,7 +110,8 @@ def completion_telemetry(
     size_bn: int,
     size_ln: int,
     over_u: int,
-    size_u: int,
+    size_np: int,
+    pourcent_sparcity: float,
     time_cmpl: float,
     error_mse: float,
     error_norm: float,
@@ -122,7 +123,8 @@ def completion_telemetry(
         size_bn: size of big N
         size_ln: size of little n
         over_u: size of overlap
-        size_u: size of u/rank
+        size_np: size of u/rank
+        pourcent_sparcity: % of sparse
         time_cmpl: completion size
         error_mse: mean square error
         error_norm: normalisation error
@@ -143,8 +145,10 @@ def completion_telemetry(
         list_size_ln.append(size_ln)
         list_over_u = old_file["overlap"].tolist()
         list_over_u.append(over_u)
-        list_size_u = old_file["u"].tolist()
-        list_size_u.append(size_u)
+        list_size_np = old_file["np"].tolist()
+        list_size_np.append(size_np)
+        list_pourcent_sparcity = old_file["pourcent_sparcity"].tolist()
+        list_pourcent_sparcity.append(pourcent_sparcity)
         list_time_cmpl = old_file["time_cmpl"].tolist()
         list_time_cmpl.append(time_cmpl)
         list_error_mse = old_file["error_mse"].tolist()
@@ -157,7 +161,8 @@ def completion_telemetry(
         list_size_bn = [size_bn]
         list_size_ln = [size_ln]
         list_over_u = [over_u]
-        list_size_u = [size_u]
+        list_size_np = [size_np]
+        list_pourcent_sparcity = [pourcent_sparcity]
         list_time_cmpl = [time_cmpl]
         list_error_mse = [error_mse]
         list_error_norm = [error_norm]
@@ -167,7 +172,8 @@ def completion_telemetry(
         "N": list_size_bn,
         "n": list_size_ln,
         "overlap": list_over_u,
-        "u": list_size_u,
+        "NP": list_size_np,
+        "pourcent_sparcity": list_pourcent_sparcity,
         "time_cmpl": list_time_cmpl,
         "error_mse": list_error_mse,
         "error_norm": list_error_norm,
