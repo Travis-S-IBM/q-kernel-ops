@@ -121,6 +121,7 @@ class Workflow:
         backend: str = "ibmq_qasm_simulator",
         nb_qubits: int = None,
         size_matrix: int = None,
+        overlaps: float = 1,
     ) -> [str]:
         """Command for matrix completion.
 
@@ -129,6 +130,7 @@ class Workflow:
             backend: name of the backend
             nb_qubits: number of qubits into the kernel (Optional)
             size_matrix: size [x, y] of the matrix (Optional)
+            overlaps: customize the overlaps
 
         Return:
             File generate
@@ -150,7 +152,10 @@ class Workflow:
 
         # Init completion object
         matrix_cmpl = Completion(
-            matrix_data=matrix_data, size_matrix=size_matrix, nb_qubits=nb_qubits
+            matrix_data=matrix_data,
+            size_matrix=size_matrix,
+            nb_qubits=nb_qubits,
+            overlaps=overlaps,
         )
         if len(matrix_cmpl.error) > 0:
             sys.exit(1)
@@ -179,6 +184,8 @@ class Workflow:
             size_bn=matrix_cmpl.size_bn,
             size_ln=matrix_cmpl.size_ln,
             over_u=matrix_cmpl.over_u,
+            rank=matrix_cmpl.rank,
+            nb_qubits=matrix_cmpl.nb_qubits,
             size_np=matrix_cmpl.size_bn + matrix_cmpl.size_ln,
             pourcent_sparcity=matrix_cmpl.sparsity,
             time_cmpl=matrix_cmpl.time_cmpl,

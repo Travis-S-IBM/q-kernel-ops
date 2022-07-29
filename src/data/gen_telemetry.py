@@ -110,6 +110,8 @@ def completion_telemetry(
     size_bn: int,
     size_ln: int,
     over_u: int,
+    rank: int,
+    nb_qubits: int,
     size_np: int,
     pourcent_sparcity: float,
     time_cmpl: float,
@@ -123,6 +125,7 @@ def completion_telemetry(
         size_bn: size of big N
         size_ln: size of little n
         over_u: size of overlap
+        rank: rank of the matrix
         size_np: size of u/rank
         pourcent_sparcity: % of sparse
         time_cmpl: completion size
@@ -145,7 +148,11 @@ def completion_telemetry(
         list_size_ln.append(size_ln)
         list_over_u = old_file["overlap"].tolist()
         list_over_u.append(over_u)
-        list_size_np = old_file["np"].tolist()
+        list_rank = old_file["rank"].tolist()
+        list_rank.append(rank)
+        list_nb_qubits = old_file["nb_qubits"].tolist()
+        list_nb_qubits.append(nb_qubits)
+        list_size_np = old_file["NP"].tolist()
         list_size_np.append(size_np)
         list_pourcent_sparcity = old_file["pourcent_sparcity"].tolist()
         list_pourcent_sparcity.append(pourcent_sparcity)
@@ -161,6 +168,8 @@ def completion_telemetry(
         list_size_bn = [size_bn]
         list_size_ln = [size_ln]
         list_over_u = [over_u]
+        list_rank = [rank]
+        list_nb_qubits = [nb_qubits]
         list_size_np = [size_np]
         list_pourcent_sparcity = [pourcent_sparcity]
         list_time_cmpl = [time_cmpl]
@@ -172,6 +181,8 @@ def completion_telemetry(
         "N": list_size_bn,
         "n": list_size_ln,
         "overlap": list_over_u,
+        "rank": list_rank,
+        "nb_qubits": list_nb_qubits,
         "NP": list_size_np,
         "pourcent_sparcity": list_pourcent_sparcity,
         "time_cmpl": list_time_cmpl,
