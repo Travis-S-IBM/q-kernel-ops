@@ -8,7 +8,7 @@
 #
 #############################################
 """
-
+from time import time
 from copy import copy
 from cvxopt import matrix, sparse
 from statsmodels.stats.correlation_tools import corr_clipped
@@ -27,6 +27,7 @@ class Completion:
         matrix_data: pd.DataFrame,
         nb_qubits: int,
         size_matrix: int,
+        overlaps: float = 1,
     ):
         """Completion init.
 
@@ -34,6 +35,7 @@ class Completion:
             matrix_data: the whole matrix fully complete
             nb_qubits: number of qubits used to generated the data
             size_matrix: [x, y] of the matrix
+            overlaps: customize the overlaps
         """
         # Gen matrix data parameters
         self.matrix_data = matrix_data
@@ -53,6 +55,8 @@ class Completion:
         self.final_cmpl = None
         self.mse = 0
         self.norm_err = 0
+        self.time_cmpl = 0
+        self.comment = ""
 
         # Gen N and n parameters
         self.size_bn = (
@@ -67,9 +71,12 @@ class Completion:
         )
 
         # Gen rank/u parameters
+        self.size_maxu = self.size_ln + self.size_bn - 1
         self.rank = 4**self.nb_qubits
-        self.over_u = self.rank
-        self.size_u = self.size_ln + self.size_bn - 1
+        self.over_u = round(overlaps * self.rank)
+        if self.over_u >= self.size_matrix:
+            self.over_u = self.size_maxu
+
         check_size = self.over_u + self.size_ln
         self.error.append(
             None
@@ -152,7 +159,7 @@ class Completion:
         self.ku_matrix = copy(self.np_matrix)
 
         for tab_u in range(self.over_u):
-            listu_i = range(self.size_bn - 1, self.size_u)
+            listu_i = range(self.size_bn - 1, self.size_maxu)
             fix_tab = [self.size_bn - (tab_u + 1) for i in listu_i]
 
             for fix, index in zip(fix_tab, listu_i):
@@ -172,23 +179,27 @@ class Completion:
         chordal_sp += self.ku_matrix
 
         # make the completion
+        start_time = time()
         self.final_cmpl = matrix(cp.psdcompletion(chordal_sp))
+        self.time_cmpl = time() - start_time
+        self.comment = "SUCCESS"
 
     def norm_error(self):
-        """Normalisation error.
+        """Normalisation Frobenius error.
+        Compare the Frobenuis length of the NP matrix and completion matrix.
 
         Return:
-            The error -> int
+            The error -> float
         """
         return np.linalg.norm(
             matrix(self.full_matrix) - self.final_cmpl, "fro"
         ) / np.linalg.norm(matrix(self.full_matrix), "fro")
 
     def mean_sqare_er(self):
-        """Mean suare error.
+        """Mean square error.
 
         Return:
-            The error -> int
+            The error -> float
         """
         difference_array = np.subtract(matrix(self.full_matrix), self.final_cmpl)
         squared_array = np.square(difference_array)
