@@ -130,7 +130,7 @@ class Workflow:
             backend: name of the backend
             nb_qubits: number of qubits into the kernel (Optional)
             size_matrix: size [x, y] of the matrix (Optional)
-            overlaps: customize the overlaps
+            overlaps: customize the overlaps in % (Optional)
 
         Return:
             File generate
