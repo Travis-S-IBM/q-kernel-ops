@@ -316,7 +316,7 @@ class Workflow:
             resources_path: path of the resources files
 
         Return:
-            Return file_name decode as pandas.Dataframe
+            Return file_name decode as matrix
         """
         local = "../" + resources_path + "/" + backend
         current_dir = os.path.dirname(os.path.abspath(__file__))
