@@ -26,6 +26,8 @@ __Examples__
 python workflow.py authentication --channel="cloud" --token="your_very_long_token" --instance="ibm-q/open/main"
 ```
 
+---
+
 ### Full workflow
 To run the full workflow, you can call this method.
 > end2end(circuit_tpl_id=None, width=3, layer=1, matrix_size=None, payload_limit=2e9, backend="ibmq_qasm_simulator", shots=1024)
@@ -46,6 +48,8 @@ __Examples__
 ```shell
 python workflow.py end2end_flow --circuit_tpl_id=[5] --matrix_size=[100,100]
 ```
+
+---
 
 ### Kernel
 The following endpoints allow you to generate the quantum kernel of the size given and to see and analyze it.
@@ -95,6 +99,8 @@ __Examples__
 python workflow.py view_kernel --file_name="kernels-2-ideal.csv"
 ```
 
+---
+
 ### Completion
 The following endpoints allow you to run the completion matrix algorithm of the kernel given and to see and analyze it.
 
@@ -133,6 +139,8 @@ __Examples__
 ```shell
 python workflow.py view_matrix --file_name="kernels-2-ideal.csv.npy"
 ```
+
+---
 
 ### Telemetry
 Each flow are generating a telemetry in order to analyze the behaviour of their flow and having some metadata to study.
