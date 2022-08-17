@@ -20,16 +20,16 @@ class Runtime:
     Everything about Runtime object.
     """
 
-    def __init__(self):
+    def __init__(self, payload_limit: int = 2e9):
         """Runtime init.
 
         Args:
-            No need specific args to setings up.
+            payload_limit: limit size for each part of the payload to send to the Runtime
         """
         self.circuits = []
         self.backend = "ibmq_qasm_simulator"
         self.shots = 1024
-        self.payload_limit = 2e9
+        self.payload_limit = payload_limit
 
         self.program_id = "Null"
         self.job_id = "Null"

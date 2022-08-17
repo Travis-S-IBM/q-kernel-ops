@@ -58,6 +58,7 @@ class Workflow:
         seed1: int = 42,
         seed2: int = 4242,
         matrix_size: List[int] = None,
+        payload_limit: int = 2e9,
         backend: str = "ibmq_qasm_simulator",
         shots: int = 1024,
     ) -> [str]:
@@ -70,6 +71,7 @@ class Workflow:
             seed1: seed for x axes
             seed2: seed for y axes
             matrix_size: matrix size for seed coordinate [x, y]
+            payload_limit: limit size for each part of the payload to send to the Runtime
             backend: backend for running circuit
             shots: number of shots for the circuit
 
@@ -111,7 +113,7 @@ class Workflow:
         # Gen kernel circuits
         kernel_circuits.gen_kernel_circuits()
         # Exec circuits
-        return_str = kernel_circuits.exec_circuits()
+        return_str = kernel_circuits.exec_circuits(payload_limit=payload_limit)
 
         return return_str
 
@@ -204,6 +206,7 @@ class Workflow:
         seed1: int = 42,
         seed2: int = 4242,
         matrix_size: List[int] = None,
+        payload_limit: int = 2e9,
         backend: str = "ibmq_qasm_simulator",
         shots: int = 1024,
     ):
@@ -216,6 +219,7 @@ class Workflow:
             seed1: seed for x axes
             seed2: seed for y axes
             matrix_size: matrix size for seed coordinate [x, y]
+            payload_limit: limit size for each part of the payload to send to the Runtime
             backend: backend for running circuit
             shots: number of shots for the circuit
 
@@ -229,6 +233,7 @@ class Workflow:
             seed1=seed1,
             seed2=seed2,
             matrix_size=matrix_size,
+            payload_limit=payload_limit,
             backend=backend,
             shots=shots,
         )
