@@ -12,7 +12,7 @@ from time import time
 
 from qiskit_ibm_runtime import QiskitRuntimeService
 from qiskit import QuantumCircuit
-from src.exception import known_exception
+from q_kernel_ops.exception import known_exception
 
 
 class Runtime:

@@ -10,7 +10,7 @@ ENV LAYER 1
 ENV BACKEND "ibmq_qasm_simulator"
 ENV QS_TOKEN NOTHING
 
-COPY src ./src
+COPY q_kernel_ops ./q_kernel_ops
 COPY workflow.py ./workflow.py
 COPY run-kernel.sh ./run-kernel.sh
     

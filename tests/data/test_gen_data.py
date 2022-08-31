@@ -3,8 +3,8 @@ import sys
 from time import time
 from typing import List
 from unittest import TestCase
-from src.data import kernel_metadata, kernel_telemetry, completion_telemetry
-from src.controllers import Kernel
+from q_kernel_ops.data import kernel_metadata, kernel_telemetry, completion_telemetry
+from q_kernel_ops.controllers import Kernel
 from tests.runtime import return_sampler, return_circuit_runner
 
 
