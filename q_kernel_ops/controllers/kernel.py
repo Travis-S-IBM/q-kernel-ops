@@ -14,7 +14,13 @@ import copy
 import math
 from pympler import asizeof
 
-from q_kernel_ops.circuits import circuit_2, circuit_5, circuit_10, circuit_18, kernel_circuit
+from q_kernel_ops.circuits import (
+    circuit_2,
+    circuit_5,
+    circuit_10,
+    circuit_18,
+    kernel_circuit,
+)
 from q_kernel_ops.data import kernel_metadata, kernel_telemetry
 from q_kernel_ops.runtime import Runtime
 
