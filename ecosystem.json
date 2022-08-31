@@ -11,7 +11,7 @@
         "versions": ["3.9"]
     },
     "tests_command": [
-        "pytest"
+        "pytest -v q_kernel_ops --skip=q_kernel_ops.workflow"
     ],
     "styles_check_command": [
         "pylint -rn q_kernel_ops tests"
