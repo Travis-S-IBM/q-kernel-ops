@@ -102,7 +102,7 @@ class Kernel:
                     )
                 )
 
-    def exec_circuits(self, payload_limit: int = 2e9) -> str:
+    def exec_circuits(self, payload_limit: int = 1e9) -> str:
         """Function to execute the circuits through Runtime and generate telemetry and metadata.
 
         Returns:

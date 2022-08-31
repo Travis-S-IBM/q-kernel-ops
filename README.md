@@ -1,6 +1,7 @@
 # Operationalizing Quantum Kernels
 - QAMP issue : [#7](https://github.com/qiskit-advocate/qamp-spring-22/issues/7)
-- Paper based : [link to arxiv](https://arxiv.org/abs/2112.08449)
+- Paper based : [2112.08449](https://arxiv.org/abs/2112.08449)
+- Circuits based : [1905.10876](https://arxiv.org/abs/1905.10876)
 
 The goal of this project is to create the code allowing to redo the experiments of the paper below and analyze the practical behaviour of the classical completion and to improve the Runtime.
 

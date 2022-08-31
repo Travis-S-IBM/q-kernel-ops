@@ -20,7 +20,7 @@ class Runtime:
     Everything about Runtime object.
     """
 
-    def __init__(self, payload_limit: int = 2e9):
+    def __init__(self, payload_limit: int = 1e9):
         """Runtime init.
 
         Args:

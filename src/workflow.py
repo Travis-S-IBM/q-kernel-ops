@@ -58,7 +58,7 @@ class Workflow:
         seed1: int = 42,
         seed2: int = 4242,
         matrix_size: List[int] = None,
-        payload_limit: int = 2e9,
+        payload_limit: int = 1e9,
         backend: str = "ibmq_qasm_simulator",
         shots: int = 1024,
     ) -> [str]:
