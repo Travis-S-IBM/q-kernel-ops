@@ -1,7 +1,7 @@
 """Tests for Kernel commands."""
 from unittest import TestCase
-from src.runtime import Runtime
-from src.circuits import circuit_2, circuit_5, kernel_circuit
+from q_kernel_ops.runtime import Runtime
+from q_kernel_ops.circuits import circuit_2, circuit_5, kernel_circuit
 from tests.test_workflow import authentication
 
 

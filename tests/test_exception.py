@@ -1,6 +1,6 @@
 """Tests for exceptions functions."""
 from unittest import TestCase
-from src.exception import known_exception
+from q_kernel_ops.exception import known_exception
 
 
 class TestUtils(TestCase):

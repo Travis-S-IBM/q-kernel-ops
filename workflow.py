@@ -42,7 +42,7 @@ python workflow.py sync_data
 """
 import fire
 
-from src import Workflow
+from q_kernel_ops import Workflow
 
 
 if __name__ == "__main__":

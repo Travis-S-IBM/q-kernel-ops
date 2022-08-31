@@ -11,9 +11,9 @@ from numpy import save, load
 import pandas as pd
 from qiskit_ibm_runtime import QiskitRuntimeService
 
-from src.controllers import sync_endpoint
-from src.controllers import Completion, Kernel
-from src.data import completion_telemetry
+from q_kernel_ops.controllers import sync_endpoint
+from q_kernel_ops.controllers import Completion, Kernel
+from q_kernel_ops.data import completion_telemetry
 
 
 class Workflow:
