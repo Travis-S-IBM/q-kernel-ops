@@ -14,7 +14,7 @@
         "pytest"
     ],
     "styles_check_command": [
-        "pylint -rn src tests"
+        "pylint -rn q_kernel_ops tests"
     ],
     "coverages_check_command": [
         "coverage3 run -m pytest",

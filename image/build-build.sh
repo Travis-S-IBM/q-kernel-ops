@@ -31,7 +31,7 @@ sed -i '/pyarrow/d' requirements-dev.txt
 podman build .  -t quay.io/qiskit/qmlbuild:${TAG} --build-arg=ANCONDA_INSTALLER=${ANACONDA_INSTALLER} --file=Dockerbuild
 podman push quay.io/qiskit/qmlbuild:${TAG}
 
-cp -r ../src .
+cp -r ../q_kernel_ops .
 cp ../workflow.py .
 
 podman build .  -t quay.io/qiskit/qmlrun:${TAG} --file=Dockerfile

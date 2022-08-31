@@ -9,7 +9,7 @@ with open('requirements.txt') as fp:
     install_requires = fp.read()
 
 setuptools.setup(
-    name="q-kernel-ops",
+    name="q_kernel_ops",
     description="Operationalizing Quantum Kernels",
     long_description=long_description,
     packages=setuptools.find_packages(),
