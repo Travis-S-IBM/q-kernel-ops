@@ -1,4 +1,7 @@
 # Operationalizing Quantum Kernels
+
+![ecosystem](https://raw.githubusercontent.com/qiskit-community/ecosystem/main/badges/q-kernel-ops.svg)
+
 - QAMP issue : [#7](https://github.com/qiskit-advocate/qamp-spring-22/issues/7)
 - Paper based : [2112.08449](https://arxiv.org/abs/2112.08449)
 - Circuits based : [1905.10876](https://arxiv.org/abs/1905.10876)
