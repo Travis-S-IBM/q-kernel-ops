@@ -8,4 +8,4 @@ pympler~=0.9
 statsmodels==0.13.2
 chompack
 cvxopt
-numpy==1.20.0
+numpy==1.22.0
