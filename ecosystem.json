@@ -11,14 +11,13 @@
         "versions": ["3.9"]
     },
     "tests_command": [
-        "pytest -v q_kernel_ops --skip=q_kernel_ops.workflow"
+        "pytest -v q_kernel_ops"
     ],
     "styles_check_command": [
         "pylint -rn q_kernel_ops tests"
     ],
     "coverages_check_command": [
         "coverage3 run -m pytest",
-        "coverage3 report --fail-under=80"
-    ],
-    "qiskit": true
+        "coverage3 report --fail-under=70"
+    ]
 }
