@@ -1,5 +1,5 @@
 """Tests for Kernel commands."""
-from unittest import TestCase
+from unittest import TestCase, skip
 from q_kernel_ops.runtime import Runtime
 from q_kernel_ops.circuits import circuit_2, circuit_5, kernel_circuit
 from tests.test_workflow import authentication
@@ -8,6 +8,7 @@ from tests.test_workflow import authentication
 class TestUtils(TestCase):
     """Test class for runtime functions."""
 
+    @skip("Remote call.")
     def test_run_runtime(self):
         """Test for run sampler function."""
         authentication()
