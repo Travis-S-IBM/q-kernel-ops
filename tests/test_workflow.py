@@ -1,6 +1,6 @@
 """Tests for CLI commands."""
 import os
-from unittest import TestCase
+from unittest import TestCase, skip
 from qiskit_ibm_runtime import QiskitRuntimeService
 import pandas as pd
 from cvxopt import matrix
@@ -17,6 +17,7 @@ def authentication():
 class TestUtils(TestCase):
     """Test class for Workflow cli."""
 
+    @skip("Remote call.")
     def test_authentication(self):
         """Test for Authentication command."""
         authentication()
@@ -24,6 +25,7 @@ class TestUtils(TestCase):
         service = QiskitRuntimeService()
         self.assertTrue(service.active_account()["verify"], True)
 
+    @skip("Remote call.")
     def test_kernel_flow(self):
         """Test for Kernel flow command."""
         authentication()
